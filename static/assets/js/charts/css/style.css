@@ -1,0 +1,67 @@
+﻿*{ margin:0px; padding:0px;}
+body,h1,h2,h3,h4,h5,h6,p,ul,ol,li,form,img,dl,dt,dd,table,th,td,blockquote,fieldset,div,strong,label,em{margin:0;padding:0;border:0;}
+ul,ol,li{list-style:none;}
+input,button{margin:0;font-size:12px;vertical-align:middle; outline:none;-webkit-appearance:none;overflow:hidden; }
+body{font-size:14px;font-family:'pingfang SC','helvetica neue',arial,'hiragino sans gb','microsoft yahei ui','microsoft yahei', "Helvetica Neue", Tahoma, Arial,simsun,sans-serif;word-break:break-all;
+      -webkit-font-smoothing: antialiased; vertical-align:baseline;-webkit-text-size-adjust:none;}
+img{ display:block; border:none;}
+h1,h2,h3,h4,h5,h6{font-weight:bold;}
+table{border-collapse:collapse;border-spacing:0;}
+body{-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;}
+a{color:#000;text-decoration:none;}
+/**/
+.clear{ clear:both; overflow:hidden;}
+.text{ text-overflow:ellipsis; overflow:hidden; display:block;white-space:nowrap;}
+.allpic{ width:100%; height:auto; display:block;}
+.color_lan{ color:#3366ff;}
+.content{ width:100%; max-width:640px; height:auto;display:block;margin:0 auto;min-height:100%;overflow:hidden;}
+.dispalynone{display:none;}
+.bgRed{background:#d4262d;}
+.bggay{ background:#f0f0f0;}
+.colRed{ color:#d4262d;}
+body,html{ height:100%; background:#f7f8fa; overflow:hidden;}
+i{font-style:normal;}
+.hrefs{ color:#3366ff!important;}
+.weui-dialog, .weui-toast{transition-duration:0;}
+/*苹果手机滚动-webkit-overflow-scrolling : touch;---加个这个就行*/
+
+/*flex*/
+.flex{display:flex; justify-content: space-around; align-items: center; }
+.flexwrap{display:flex; justify-content:space-around; align-items: center; flex-wrap:wrap;}
+.flexbtn{display:flex; justify-content:space-between; align-items: center; }
+.flexStart{display: flex;justify-content: flex-start;align-items: center;}
+.flexwrapStart{display: flex;justify-content: flex-start;align-items: center;flex-wrap:wrap;}
+.flexcenter{display: flex;justify-content: center;align-items: center;}
+
+
+/**/
+.chart_left{ width:30%; height:100%; float:left;}
+.chart_left2{ width:40%; }
+/**/
+.charts{ width:98%; margin:10px 0 0 2%; background:#fff;}
+/**/
+#newlist{ overflow:hidden; padding:10px 0;}
+#newlist ul{ width:110%; line-height:24px; font-size:14px; height:100%; overflow-y:scroll;}
+#newlist ul li{ margin:5px 0px 5px 15px; width:86%;}
+#newlist ul li span:first-child{ float:right; color:#808080;}
+
+/**/
+.dataxq p{ background:#fff; color:#6b6b6b; padding:6px 2%; margin:10px 0 0 2%; width:33%;}
+.dataxq p span{ color:#4b7efe; font-size:18px;  padding:0 0 0 10px;}
+/**/
+.chartsDiv{ float:left; width:21%; margin:55px 0 0 3.2%;}
+.circleChart_canvas{ width:100%!important;}
+.circleChart_text{     line-height: 30px!important;
+    top: 30%!important;
+    width: 70%!important;
+    margin:auto!important;
+    display: block;
+    right: 0;
+    font-size:24px!important;
+    left: 0;}
+.circleChart_text span{ display:block; font-size:12px; color:#808080; line-height:16px;}
+@media screen and (max-width:1200px){
+}
+ 
+
+

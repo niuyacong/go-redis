@@ -1,0 +1,65 @@
+﻿.panel-title {
+	font-size: 14px;
+	font-weight: normal;
+	color: #333;
+	height: 22px;
+	line-height: 22px;
+}
+.panel-header {
+    padding: 4px;
+    position: relative;
+}
+.window {
+	background-color: #ddd;
+}
+.window .window-header {
+	background: #f4f4f4;
+	padding:2px;
+}
+.pannel-tool a{
+	margin:2px 0 0 2px;
+}
+.btn-sm{
+			/*padding:3px 5px;*/
+		}
+		.margin{
+			margin:3px 1px;
+		}
+		.datagrid .datagrid-pager {
+			border-width: 1px 0 0 0;
+			border-style: dotted;
+		}
+		.btn{
+			font-size:12px;
+		}
+.css_table
+        {
+            border-collapse: collapse;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .css_table td, table th
+        {
+            border: 1px solid #cad9ea;
+            color: #666;
+			height: 30px;
+			padding:3px;
+        }
+        .css_table thead th
+        {
+            background-color: #CCE8EB;
+            width: 100px;
+        }
+        .css_table tr:nth-child(odd)
+        {
+            background: #fff;
+        }
+        .css_table tr:nth-child(even)
+        {
+            background: #F5FAFA;
+		}
+		.css_table td:first-child{text-align:right}
+		.css_table td:nth-child(2){text-align:left}
+
+
+

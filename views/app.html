@@ -1,0 +1,2665 @@
+﻿<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"> 
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>{{.app.title}}</title>
+<script src="/assets/js/jquery-1.11.3.min.js"></script>
+<script src="/assets/js/jquery.form.min.js"></script>
+ 
+ 
+<script src="/assets/js/vue.js"></script>
+<script src="/assets/js/vue-router.min.js"></script>
+<script src="/js/axios.min.js"></script>
+<script src="/js/art-template.js"></script>
+
+<link rel="stylesheet" href="/assets/plugins/select2/select2.min.css" type="text/css" />
+<script src="/assets/plugins/select2/select2.min.js"></script>
+<script src="/assets/plugins/select2/i18n/zh-CN.js"></script>
+
+<link rel="stylesheet" href="/css/app.css?t=110225111" type="text/css" /> 
+<link rel="stylesheet" href="/assets/adminlte/css/ionicons.min.css">  
+<link href="/assets/js/jqweui/css/jquery-weui.min.css" rel="stylesheet">
+<script src="/assets/js/jqweui/js/jquery-weui.min.js"></script>
+
+{{if eq .app.oauth2_on "1"}}
+<script src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js" type="text/javascript"></script>
+<script  language="javascript" >
+	var _wx_share_title="{{.app.title}}";
+	var _wx_share_desc="{{.app.title}}";
+	var _wx_share_logo="http://"+window.location.host+"/images/logo.png";
+	var _wx_share_link="http://"+window.location.host+"/app/{{.app.code}}";
+	if("{{.app.wx_share_title}}"!=""){
+		_wx_share_title="{{.app.wx_share_title}}";
+	}
+	if("{{.app.wx_share_desc}}"!=""){
+		_wx_share_desc="{{.app.wx_share_desc}}";
+	}
+	if("{{.app.wx_share_logo}}"!=""){
+		_wx_share_logo="{{.app.wx_share_logo}}";
+	}
+	if("{{.app.wx_share_link}}"!=""){
+		_wx_share_link="{{.app.wx_share_link}}";
+	}
+    //console.log(window.location.host);
+	var url=location.href.split('#')[0];
+	url=escape(url);
+	var title=_wx_share_title;
+	var desc=_wx_share_desc;
+	var img=_wx_share_logo;
+	var clickurl=_wx_share_link;
+	clickurl=escape(clickurl);
+	var wxid=1;
+	if("{{.app.oauth2_wxid}}"!=""){
+		wxid="{{.app.oauth2_wxid}}";
+	}
+	if("{{.app.wx_lbs}}"=="1"){
+		document.write("<script src='/wxmp/sharejsoption?wxid="+wxid+"&url="+url+"&title="+title+"&desc="+desc+"&img="+img+"&clickurl="+clickurl+"&apis=updateAppMessageShareData,updateTimelineShareData,hideMenuItems,getLocation'><\/script>");
+	}else{
+		document.write("<script src='/wxmp/sharejs?wxid="+wxid+"&url="+url+"&title="+title+"&desc="+desc+"&img="+img+"&clickurl="+clickurl+"&_isopen=false1'><\/script>");
+	}
+</script>
+{{end}}
+
+<script src="/app/vue?app={{.appcode}}&_openid={{._openid}}{{._paramstr}}" type="text/javascript"></script>
+<link rel="stylesheet" href="/assets/sy/appindex/css/iconfont.css">  
+<link rel="stylesheet" href="/assets/sy/login/css/app_style.css?v=1112234" type="text/css" />
+<link rel="stylesheet" href="/assets/sy/appindex/menu/menu_topside.css?t=110225111" type="text/css" /> 
+<script src="/assets/sy/appindex/menu/classie.js"></script>
+<script src="/js/pinchzoom.min.js"></script>
+
+<style type="text/css">
+#app{max-width:480px;}
+.fixnav{ 
+  position: fixed; 
+  bottom: 0; 
+  left: 0;  
+  right: 0;
+  background: #fff;  
+  border-top: #e8e9eb solid 1px; 
+  text-align: center;
+  padding:0 0 5px;
+  p{
+    line-height:12px;
+  }
+}
+.fixnav a{margin-top:5px;}
+.fixnav a img{margin:auto;}
+.iconfont,.fixnav p{ color: #999;/*#c6c6c6;*/ }
+.iconfont{ font-size:20px;}
+.router-link-exact-active p,.router-link-exact-active .iconfont{ color: #fe4543; }
+
+.vue-pull-to-wrapper[data-v-12abd9fb] {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	height: 100%
+}
+
+.scroll-container[data-v-12abd9fb] {
+	-webkit-box-flex: 1;
+	-webkit-flex: 1;
+	flex: 1;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch
+}
+
+.vue-pull-to-wrapper .action-block[data-v-12abd9fb] {
+	position: relative;
+	width: 100%
+}
+
+.default-text[data-v-12abd9fb] {
+	height: 100%;
+	line-height: 50px;
+	text-align: center
+}
+
+
+.fa {
+    font-size: 20px;
+}
+.fa, .fixnav p {
+    color: #c6c6c6;
+}
+.router-link-exact-active p, .router-link-exact-active .fa {
+    color: #fe4543;
+}
+.router-link-exact-active p, .router-link-exact-active .fa {
+    color: #fe4543;
+}
+
+.tit_cls {
+    color: #333;
+    font-size: 16px;
+    background: #fff;
+    padding: 10px 8px;
+}
+
+.tit_cls i {
+    font-size: 18px;
+    /*padding-right: 1px;*//*.4rem;*/
+}
+
+.icon-add {
+    padding-right: 0;
+    font-size: 18px;
+}
+
+.weui-cell__hd img {
+    display: block;
+    margin-right: 5px;
+}
+
+.pic_list {
+    width: 40px;
+    height: 40px;
+}
+weui.min.css:5
+a img {
+    border: 0;
+}
+
+
+.graypic { 
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    
+    filter: grayscale(100%);
+	
+    filter: gray;
+}
+
+.weui_title_p{
+	overflow:hidden;
+	text-overflow:ellipsis;
+	width:260px;
+}
+
+.weui-media-box__desc_p{
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+	/*max-width:256px;*/
+}
+
+.child-view {  
+  position: absolute;  
+  left: 0;  
+  top: 0;  
+  width: 100%;  
+  height: 100%;
+  transition: all .5s cubic-bezier(.55,0,.1,1);  
+}  
+.slide-left-enter, .slide-right-leave-active {  
+  opacity: 0;  
+  -webkit-transform: translate(30px, 0);  
+  transform: translate(30px, 0);  
+}  
+.slide-left-leave-active, .slide-right-enter {  
+  opacity: 0;  
+  -webkit-transform: translate(-30px, 0);  
+  transform: translate(-30px, 0);  
+}  
+
+.datashows[data-v-dec7aa6c] {
+    width: 100%;
+}
+
+.select2-container--default .select2-selection--single{
+	border:0 ;
+}
+
+.search{ background:#fff;}
+ .search p{padding:5px 5px; text-align:center;}
+.search p input{border:1px solid #ccc;border-radius:100px;padding:7px 12px;width:65%;font-size:14px;}
+.search p span{font-size:15px;color:#444;margin-left:8px;background-color: #1AAD19;color: #fff;padding: 7px 12px;}
+
+/* picZom点击放大图*/
+        .picZom{ position:fixed!important; top:0; left:0; right:0; bottom:0; margin:0; background:rgba(0, 0, 0, 0.87); z-index:-99999;opacity:0;}
+        .picZom .pinch-zoom-container,.picZom .pinch-zoom{width:100%; height:100%!important; position:relative; top:0; left:0; right:0; bottom:0; }
+        .picZom .pinch-zoom-container img{ width:100%; height:auto; position:absolute;top:0; left:0; right:0; bottom:0; margin:auto auto;}
+</style>
+</style>
+
+</head>
+
+
+<body>
+{{if eq .app.wx_lbs "1"}}
+<input type="text" id="lat" style="display: none;">
+<input type="text" id="lon" style="display: none;">
+<input type="text" id="wxaddr" style="display: none;">
+<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=BGVBZ-DAG3K-5SCJC-ALFHM-37M35-RWFOK&libraries=convertor"></script>
+<script type="text/javascript">
+function locationjs(){
+	var lat=$("#lat").val();
+	var lon=$("#lon").val();
+	//转换GPS坐标为腾讯坐标
+	qq.maps.convertor.translate(new qq.maps.LatLng(lat, lon), 1, function (res) {
+		res = res[0];
+		var latLng = new qq.maps.LatLng(res.lat, res.lng);
+		geocoder = new qq.maps.Geocoder({
+			complete:function(result){
+				console.log('成功：'+result.detail.address);
+				$("#wxaddr").val(result.detail.address);
+			}
+		});
+		var coord=new qq.maps.LatLng(res.lat,res.lng);
+		geocoder.getAddress(coord);
+		console.log("aaaaa",$("#wxaddr").val());
+	});
+
+
+
+}
+</script>
+{{end}}
+<script type="text/javascript">
+var _test=Vue.component('test', {
+        template: '<div  class="weui-cell">hello test</div>',
+        data(){
+            return {
+            }
+        },
+		created() {
+			console.log('test is created...');
+		}
+})
+String.prototype.replaceAll=function(f,e){
+    var reg=new RegExp(f,"g"); //创建正则RegExp对象   
+    return this.replace(reg,e); 
+}
+
+
+var _view=Vue.component('field-view', {
+		props: [],
+        template: '\
+		<div>\
+			<div class="pro" style="position: fixed; top: 0; margin-bottom: 80px;z-index: 800; width: 100%;">\
+				<div class="fixDivtit">\
+					<div class="tit_cls flexbtn">\
+						<span><i  class="iconfont icon-left" style="display:none0;" @click="prev"></i><span v-text="title"></span></span>\
+						<div>\
+						<i class="iconfont icon-close" v-if="is_del==10 && id>0" style="background-color: #00b3a2;color: white;font-size: 14px;padding:5px 8px;margin-right:5px;"  @click="del">&nbsp;删除</i>\
+						<i class="ion ion-ios-more" style="font-size: 22px;color: #999;margin-right:3px;" v-if="btns.length > 0 || (is_del==1 && id>0)" @click="popupbar"></i>\
+						</div>\
+					</div>\
+				</div>\
+			</div>\
+			<form id="form1"  method="post" action="/xapi/editpost" style="margin-top:55px;">\
+			<div v-for="row in fields"  :key="row.id">\
+			<div class="weui-cells__title" v-if="row.form_weui_title!=\'\'" v-text="row.form_weui_title"></div>\
+			<div class="weui-cells "  v-show="row.is_hide==0" v-bind:style="\'margin-top:\'+row.form_margin_top">\
+				<field-label v-bind:_field="row" v-bind:name="row.field_code" v-bind:id="row.field_code" v-bind:title="row.field_name"  v-show="row.is_hide==0" v-bind:value="row._value" v-if="row.form_type==\'标签框\' " v-bind:required="row.form_required"></field-label>\
+				<field-input v-bind:_field="row" v-bind:name="row.field_code" v-bind:id="row.field_code" v-bind:code="code" v-show="row.is_hide==0"  v-bind:is_readonly="row.is_readonly" v-bind:title="row.field_name" v-bind:value="row._value" v-if="row.form_type==\'文本框\' " v-bind:required="row.form_required" v-bind:placeholder="row.form_tip"></field-input>\
+				<field-select v-bind:_field="row" v-bind:fieldid="row.id" v-bind:module="row.view_list_module" v-bind:code="code"  v-show="row.is_hide==0" v-bind:name="row.field_code" v-bind:islink="row.view_list_islink" v-bind:title="row.field_name" v-bind:id="row.field_code" v-bind:value="row._value" v-if="row.form_type==\'下拉框\' " v-bind:is_editable="row.is_editable" v-bind:is_editable_combobox="row.is_editable_combobox"  v-bind:required="row.form_required"    v-bind:form_cascade="row.form_cascade" ></field-select>\
+				<field-switch v-bind:_field="row" v-bind:name="row.field_code" v-bind:id="row.field_code" v-bind:title="row.field_name"  v-show="row.is_hide==0" v-bind:value="row._value" v-if="row.form_type==\'开关按钮\'" v-bind:required="row.form_required" ></field-switch>\
+				<field-editor v-bind:_field="row" v-bind:name="row.field_code" v-bind:id="row.field_code" v-bind:title="row.field_name"  v-show="row.is_hide==0" v-bind:value="row._value" v-if="row.form_type==\'编辑框\'" v-bind:placeholder="row.form_tip" v-bind:required="row.form_required"></field-editor>\
+				<field-date  v-bind:_field="row" v-bind:id="row.field_code" v-bind:name="row.field_code" v-bind:title="row.field_name" v-bind:value="row._value" v-if="row.form_type==\'日期选择\' " v-bind:required="row.form_required"></field-date>\
+				<field-input v-bind:_field="row" v-bind:name="row.field_code" v-bind:id="row.field_code" v-bind:code="code" v-show="row.is_hide==0" v-bind:title="row.field_name" v-bind:is_readonly="row.is_readonly" v-bind:value="row._value" v-if="row.form_type==\'日期时间\' " v-bind:required="row.form_required"></field-input>\
+				<field-pic v-bind:_field="row" v-bind:id="row.field_code" v-bind:name="row.field_code"  v-bind:code="code" v-bind:title="row.field_name"  v-bind:required="row.form_required" v-bind:shuiyin="row.img_upload_yin_state"  v-show="row.is_hide==0" v-bind:value="row._value" v-if="row.form_type==\'图片上传\' && row.is_multpics_upload==0"></field-pic>\
+				<field_imgupload v-bind:_field="row" v-bind:id="row.field_code" v-bind:name="row.field_code"  v-bind:code="code" v-bind:title="row.field_name" v-bind:required="row.form_required" v-show="row.is_hide==0" v-bind:value="row._value" v-bind:shuiyin="row.img_upload_yin_state" v-if="row.form_type==\'图片上传\' && row.is_multpics_upload==1" v-bind:multpics_module="row.multpics_module" v-bind:field_code="row.field_code"></field_imgupload>\
+				<field-radio v-bind:_field="row"  v-bind:fieldid="row.id" v-bind:name="row.field_code" v-bind:id="row.field_code"  v-show="row.is_hide==0" v-bind:title="row.field_name" v-bind:value="row._value" v-if="row.form_type==\'单选框\'" v-bind:required="row.form_required"></field-radio>\
+				<field-checkbox v-bind:_field="row" v-bind:fieldid="row.id" v-bind:name="row.field_code" v-bind:id="row.field_code"  v-show="row.is_hide==0" v-bind:title="row.field_name" v-bind:value="row._value" v-if="row.form_type==\'复选框\' " v-bind:required="row.form_required"></field-checkbox>\
+			</div>\
+			</div>\
+				<input type="hidden" id="_id" name="_id" v-bind:value="id" />\
+				<input type="hidden" id="_code" name="_code" v-bind:value="code" />\
+			</form>\
+			<div class="weui-cells__title" style="margin-bottom:30px;">\
+				<a href="javascript:;" @click="submit"  class="weui-btn weui-btn_default">返回</a>\
+			</div>\
+			<div class="weui-cells__title" style="margin-bottom:30px;" >\
+				<div  v-for="(row,index) in btns2" :key="row.id" style="padding:2px;">\
+				<a href="javascript:;" v-if="index==0"  @click="fbtn(row)" class="weui-btn weui-btn_primary"  v-text="row.title">-</a>\
+				<a href="javascript:;" v-else-if="index==1" @click="fbtn(row)" class="weui-btn weui-btn_warn" v-text="row.title">-</a>\
+				<a href="javascript:;" v-else-if="index==2" @click="fbtn(row)"  class="weui-btn weui-btn_default"   v-text="row.title">-</a>\
+				<a href="javascript:;" v-else-if="index==3" @click="fbtn(row)"  class="weui-btn weui-btn_warn"   v-text="row.title">-</a>\
+				<a href="javascript:;" v-else-if="index==4" @click="fbtn(row)"  class="weui-btn weui-btn_default"   v-text="row.title">-</a>\
+				<a href="javascript:;" v-else="index==5" @click="fbtn(row)"  class="weui-btn weui-btn_primary"  v-text="row.title">-</a>\
+				</div>\
+			</div>\
+			\
+		<div id="toolbar_list" class="weui-popup__container popup-bottom">\
+		  <div class="weui-popup__overlay"></div>\
+		  <div class="weui-popup__modal" style="border-radius: 5px 5px 0 0;">\
+			<div class="modal-content" style="padding-top:15px;padding-bottom:5px;">\
+			  <div class="weui-grids">\
+				<a href="javascript:;" style="display:none0;"  @click="del" v-if="is_del==1 && id>0" class="weui-grid js_grid" data-id="dialog">\
+				  <div class="weui-grid__icon">\
+					<img src="/images/png/png676.png" alt="">\
+				  </div>\
+				  <p class="weui-grid__label">\
+					删除\
+				  </p>\
+				</a>\
+				<a  href="javascript:;"  @click="fbtn(row)" v-for="row in btns" :key="row.id" class="weui-grid js_grid" data-id="dialog">\
+				  <div class="weui-grid__icon">\
+					<img  v-bind:src="\'/images/png/\'+row.icon.replace(\'-\',\'\')+\'.png\'" alt="">\
+				  </div>\
+				  <p class="weui-grid__label"  v-text="row.title"> </p>\
+				</a>\
+			  </div>\
+			</div>\
+		  </div>\
+		 </div>\
+		 \
+		</div>\
+		',
+        data() {
+        return {
+            list: [],
+            code: "",
+            id: 0,
+			tb:{},
+            fields: {},
+            m: {},
+			is_create:0,
+			is_del:0,
+			is_edit:0,
+			is_search:1,
+			title:"编辑",
+			tbid:0,
+			btns:[],
+			btns2:[]
+        }
+    },
+    methods: {
+        prev() {
+            this.$router.go(-1);
+        },
+		popupbar(){
+			console.log('popup2.....'+this.is_del);
+			$('#toolbar_list').popup();
+		},
+		fbtn(row){
+			$this=this;
+			if(row.jstr!=''){
+				var jstr=template.render(row.jstr,{tb:$this.tb,m:$this.m});
+				eval(jstr);
+				$.closePopup();
+			}else{
+				var url=row.url;
+				if(row.param!=''){
+					if(url.indexOf('?')==-1){
+						url=url+'?'+row.param;
+					}else{
+						url=url+'&'+row.param;
+					}					
+				}
+				var url=template.render(url,{tb:$this.tb,m:$this.m});
+				window.location=url;
+			}
+		},
+		del(){
+			$this=this;
+			jQuery.confirm('确定要删除此记录吗?','确认删除',function(){
+				axios.get('/adm/d/del?code='+$this.code+'&id=' + $this.$route.query.id)
+				.then(function (response) {
+					if (response.data =='1'){
+						jQuery.alert('操作成功！',function(){
+							$this.$router.go(-1);  
+						});
+					}else{
+						jQuery.toast('操作失败!','cancel');
+					}
+				})
+				.catch(function (error) {
+					
+				});
+			},function(){
+				$this.$router.go(-1);
+			});
+		},
+		submit:function(){  
+			$this=this;
+			this.$router.go(-1);;
+        },
+		tmpStorage(){
+			for(var i=0;i<this.fields.length;i++){
+				if(this.fields[i].form_type=='开关按钮'){
+					if($('#'+this.fields[i].field_code).prop('checked')){
+						localStorage.setItem("_tmp_"+$this.code+'_'+this.fields[i].field_code+"_val",'1');
+					}else{
+						localStorage.setItem("_tmp_"+$this.code+'_'+this.fields[i].field_code+"_val",'0');
+					}
+				}else if(this.fields[i].form_type=='单选框'){
+					localStorage.setItem("_tmp_"+$this.code+'_'+this.fields[i].field_code+"_val",$("input[name='"+this.fields[i].field_code+"']:checked").val());
+				}else if(this.fields[i].form_type=='复选框'){
+					_chval="";
+					$("input[name='"+this.fields[i].field_code+"']:checked").each(function(){
+						if(_chval!=''){_chval+=",";}
+						_chval+=$(this).val();   
+					});
+					localStorage.setItem("_tmp_"+$this.code+'_'+this.fields[i].field_code+"_val",_chval);
+				}else if($('#'+this.fields[i].field_code).val()!=''){
+					localStorage.setItem("_tmp_"+$this.code+'_'+this.fields[i].field_code+"_val",$('#'+this.fields[i].field_code).val());
+				}else{
+					localStorage.removeItem("_tmp_"+$this.code+'_'+this.fields[i].field_code+"_val");
+				}
+			}
+		},
+		pmtStorage(){
+			for(var i=0;i<this.fields.length;i++){
+				if(this.fields[i].form_type=='文本框'){
+					if(this.fields[i].view_list_module!=''){
+						
+					}
+				}
+			}
+		}
+    },
+    created() {
+        $this = this;
+        $this.code = $this.$route.query.c;
+        $this.id = $this.$route.query.id;
+		///xapi/titlejson?code=ledgers
+		axios.get('/xapi/titlejson?code='+$this.code+'&id=' + $this.$route.query.id)
+            .then(function (response) {
+                console.log(response);
+                if (response.data != null){
+					$this.title = response.data.title_edit;
+				}
+				if($this.id!=null && $this.id!='0' && $this.id!=''){
+					//$this.title+='/编辑';
+				}else{
+					//$this.title+='/新建';
+					$this.title = response.data.title_new;
+				}
+            })
+            .catch(function (error) {
+                console.log(error);
+        });
+		var prarams="";
+		if($this.$route.query.id =='0' || $this.$route.query.id==''){ 
+			Object.getOwnPropertyNames($this.$route.query).forEach(function(key){
+				if(key!='code'){
+					prarams+='&'+key+'='+$this.$route.query[key]
+				}
+			});
+		}
+        axios.get('/xapi/fieldjson?code='+$this.code+'&_openid={{._openid}}&id=' + $this.$route.query.id+'&'+prarams)
+            .then(function (response) {
+                console.log(response);
+                if (response.data != null) {
+					$this.fields = response.data;
+					var i=0;
+					for(i=0;i<$this.fields.length;i++){
+						$this.fields[i].is_readonly='1';
+					}
+				}
+            })
+            .catch(function (error) {
+                console.log(error);
+        });
+
+        axios.get('/xapi/datajson?code='+$this.code+'&_openid={{._openid}}&id=' + $this.$route.query.id)
+            .then(function (response) {
+                console.log(response);
+                if (response.data != null) $this.m = response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+        });
+		//
+		axios.get('/xapi/tbjson?code='+$this.code)
+			.then(function (response) {
+				if(response.data!=null && response.data!=""){
+					$this.tb=response.data;
+					$this.tbid=response.data.id;
+					$this.is_create=response.data.is_create;
+					$this.is_search=response.data.is_search;
+					$this.is_edit=response.data.is_edit;
+					$this.is_del=response.data.is_del;
+				}
+		});
+		/*
+		axios.get('/xapi/btnsjson?p=2&code='+$this.code)
+			.then(function (response) {
+				if(response.data!=null && response.data!=""){
+					console.log(response.data);
+					$this.btns=response.data;
+
+			}
+		});
+		*/
+		var rst=$.ajax({
+				url : '/xapi/btnsjson?p=2&code='+$this.code,
+				type : 'get',
+				async: false,//使用同步的方式,true为异步方式
+				data : {}
+		}).responseText;
+		var btnsjs=eval('('+rst+')');
+		$this.btns=btnsjs;
+
+		var rst2=$.ajax({
+				url : '/xapi/btnsjson2?p=2&code='+$this.code,
+				type : 'get',
+				async: false,//使用同步的方式,true为异步方式
+				data : {}
+		}).responseText;
+		var btnsjs2=eval('('+rst2+')');
+		$this.btns2=btnsjs2;
+
+    },
+    mounted() {
+		$this=this;
+        console.log('datainfo mounted');
+		window.scroll(0,0);
+		var rst=$.ajax({
+				url : '/xapi/tbjson?code='+$this.code,
+				type : 'get',
+				async: false,//使用同步的方式,true为异步方式
+				data : {}
+		}).responseText;
+		var tbjs=eval('('+rst+')');
+		$this.tbid=tbjs.id;
+		$this.is_create=tbjs.is_create;
+		$this.is_search=tbjs.is_search;
+		$this.is_edit=tbjs.is_edit;
+		$this.is_del=tbjs.is_del;
+
+		//console.log('................extable...........');
+		rst=$.ajax({
+			url : '/xapi/extable',
+			type : 'get',
+			async: false,//使用同步的方式,true为异步方式
+			data : {'code':$this.code,'extype':'javascript','expage':'info','explace':'LOAD','id':$this.id}
+		}).responseText;
+		if(rst!=''){
+			var js='function _js(){'+rst+'};';
+			eval(js);
+			var jsrst=eval('_js();');
+			if(!jsrst){
+				//console.log('................jsrst:返回 return');
+			}
+			//console.log('................jsrst:继续');
+		}
+		//console.log('................extable.....end......');
+		$(function(){
+			setTimeout(function () { 
+				$.ajax({
+					url : '/xapi/eventjson',
+					type : 'get',
+					async: true,
+					data : {'code':$this.code},
+					success:function(result){
+						//console.log('................eventjson.....success......');
+						console.log(result);
+						for (var i=0;i<result.length;i++)
+						{
+							if(result[i].content!=''){
+								console.log('------eventjson----result[i].field:'+result[i].field+'   '+result[i].event_type);
+								var content=result[i].content;
+								console.log('------eventjson:'+content);
+								console.log('------eventjson1:'+$('#'+result[i].field));
+								$('#'+result[i].field).on(result[i].event_type,function(){
+									eval(content);
+								});
+							}
+						}
+					}
+				});	
+			}, 1000);
+
+		
+		});
+		
+    }
+})
+
+var _info=Vue.component('field-info', {
+		props: [],
+        template: '\
+		<div>\
+			<div class="pro" style="position: fixed; top: 0; margin-bottom: 80px;z-index: 800; width: 100%;">\
+				<div class="fixDivtit">\
+					<div class="tit_cls flexbtn">\
+						<span><i  class="iconfont icon-left" style="display:none0;" @click="prev"></i><span v-text="title"></span></span>\
+						<div>\
+						<i class="iconfont icon-close" v-if="is_del==10 && id>0" style="background-color: #00b3a2;color: white;font-size: 14px;padding:5px 8px;margin-right:5px;"  @click="del">&nbsp;删除</i>\
+						<i class="ion ion-ios-more" style="font-size: 22px;color: #999;margin-right:3px;" v-if="btns.length > 0 || (is_del==1 && id>0)" @click="popupbar"></i>\
+						</div>\
+					</div>\
+				</div>\
+			</div>\
+			<form id="form1"  method="post" action="/xapi/editpost" style="margin-top:55px;">\
+			<div v-for="row in fields"  :key="row.id">\
+			<div class="weui-cells__title" v-if="row.form_weui_title!=\'\'" v-text="row.form_weui_title"></div>\
+			<div class="weui-cells "  v-show="row.is_hide==0" v-bind:style="\'margin-top:\'+row.form_margin_top">\
+				<field-label v-bind:_field="row" v-bind:name="row.field_code" v-bind:id="row.field_code" v-bind:title="row.field_name"  v-show="row.is_hide==0" v-bind:value="row._value" v-if="row.form_type==\'标签框\' " v-bind:required="row.form_required"></field-label>\
+				<field-input v-bind:_field="row" v-bind:name="row.field_code" v-bind:id="row.field_code" v-bind:code="code" v-show="row.is_hide==0"  v-bind:is_readonly="row.is_readonly" v-bind:title="row.field_name" v-bind:value="row._value" v-if="row.form_type==\'文本框\' " v-bind:required="row.form_required" v-bind:placeholder="row.form_tip"></field-input>\
+				<field-select v-bind:_field="row" v-bind:fieldid="row.id" v-bind:module="row.view_list_module" v-bind:code="code"  v-show="row.is_hide==0" v-bind:name="row.field_code" v-bind:islink="row.view_list_islink" v-bind:title="row.field_name" v-bind:id="row.field_code" v-bind:value="row._value" v-if="row.form_type==\'下拉框\' " v-bind:is_editable="row.is_editable" v-bind:is_editable_combobox="row.is_editable_combobox"  v-bind:required="row.form_required"    v-bind:form_cascade="row.form_cascade" ></field-select>\
+				<field-select2 v-bind:_field="row" v-bind:fieldid="row.id" v-bind:module="row.view_list_module" v-bind:code="code"  v-show="row.is_hide==0" v-bind:name="row.field_code" v-bind:islink="row.view_list_islink" v-bind:title="row.field_name" v-bind:id="row.field_code" v-bind:value="row._value" v-if="row.form_type==\'搜索下拉框\' " v-bind:is_editable="row.is_editable" v-bind:is_editable_combobox="row.is_editable_combobox"  v-bind:required="row.form_required"    v-bind:form_cascade="row.form_cascade" ></field-select2>\
+				<field-switch v-bind:_field="row" v-bind:name="row.field_code" v-bind:id="row.field_code" v-bind:title="row.field_name"  v-show="row.is_hide==0" v-bind:value="row._value" v-if="row.form_type==\'开关按钮\'" v-bind:required="row.form_required" ></field-switch>\
+				<field-editor v-bind:_field="row" v-bind:name="row.field_code" v-bind:id="row.field_code" v-bind:title="row.field_name"  v-show="row.is_hide==0" v-bind:value="row._value" v-if="row.form_type==\'编辑框\'" v-bind:placeholder="row.form_tip" v-bind:required="row.form_required"></field-editor>\
+				<field-date  v-bind:_field="row" v-bind:id="row.field_code" v-bind:name="row.field_code" v-bind:title="row.field_name" v-bind:value="row._value" v-if="row.form_type==\'日期选择\' " v-bind:required="row.form_required"></field-date>\
+				<field-input v-bind:_field="row" v-bind:name="row.field_code" v-bind:id="row.field_code" v-bind:code="code" v-show="row.is_hide==0" v-bind:title="row.field_name" v-bind:is_readonly="row.is_readonly" v-bind:value="row._value" v-if="row.form_type==\'日期时间\' " v-bind:required="row.form_required"></field-input>\
+				<field-pic v-bind:_field="row" v-bind:id="row.field_code" v-bind:name="row.field_code"  v-bind:code="code" v-bind:title="row.field_name"  v-bind:required="row.form_required" v-bind:img_upload_id="row.img_upload_id"  v-bind:shuiyin="row.img_upload_yin_state" v-bind:is_readonly="row.is_readonly"  v-show="row.is_hide==0" v-bind:value="row._value" v-if="row.form_type==\'图片上传\' && row.is_multpics_upload==0"></field-pic>\
+				<field_imgupload v-bind:_field="row" v-bind:id="row.field_code" v-bind:name="row.field_code"  v-bind:code="code" v-bind:title="row.field_name"  v-show="row.is_hide==0" v-bind:value="row._value" v-bind:shuiyin="row.img_upload_yin_state" v-bind:img_upload_id="row.img_upload_id" v-bind:is_readonly="row.is_readonly"  v-if="row.form_type==\'图片上传\' && row.is_multpics_upload==1" v-bind:multpics_module="row.multpics_module" v-bind:field_code="row.field_code" v-bind:required="row.form_required"></field_imgupload>\
+				<field-radio v-bind:_field="row"  v-bind:fieldid="row.id" v-bind:name="row.field_code" v-bind:id="row.field_code"  v-show="row.is_hide==0" v-bind:title="row.field_name" v-bind:value="row._value" v-if="row.form_type==\'单选框\'" v-bind:required="row.form_required"></field-radio>\
+				<field-checkbox v-bind:_field="row" v-bind:fieldid="row.id" v-bind:name="row.field_code" v-bind:id="row.field_code"  v-show="row.is_hide==0" v-bind:title="row.field_name" v-bind:value="row._value" v-if="row.form_type==\'复选框\' " v-bind:required="row.form_required"></field-checkbox>\
+			</div>\
+			</div>\
+				<input type="hidden" id="_id" name="_id" v-bind:value="id" />\
+				<input type="hidden" id="_code" name="_code" v-bind:value="code" />\
+				<input type="hidden" id="_formToken" name="_formToken" value="" />\
+			</form>\
+			<div class="weui-cells__title" style="margin-bottom:30px;">\
+				<a href="javascript:;" @click="submit"  v-if="is_edit==1" class="weui-btn weui-btn_primary">保存</a>\
+			</div>\
+			<div class="weui-cells__title" style="margin-bottom:30px;" >\
+				<div  v-for="(row,index) in btns2" :key="row.id" style="padding:2px;">\
+				<a href="javascript:;" v-if="index==0"  @click="fbtn(row)" class="weui-btn weui-btn_primary"  v-text="row.title">-</a>\
+				<a href="javascript:;" v-else-if="index==1" @click="fbtn(row)" class="weui-btn weui-btn_warn" v-text="row.title">-</a>\
+				<a href="javascript:;" v-else-if="index==2" @click="fbtn(row)"  class="weui-btn weui-btn_default"   v-text="row.title">-</a>\
+				<a href="javascript:;" v-else-if="index==3" @click="fbtn(row)"  class="weui-btn weui-btn_warn"   v-text="row.title">-</a>\
+				<a href="javascript:;" v-else-if="index==4" @click="fbtn(row)"  class="weui-btn weui-btn_default"   v-text="row.title">-</a>\
+				<a href="javascript:;" v-else="index==5" @click="fbtn(row)"  class="weui-btn weui-btn_primary"  v-text="row.title">-</a>\
+				</div>\
+			</div>\
+			\
+		<div id="toolbar_list" class="weui-popup__container popup-bottom">\
+		  <div class="weui-popup__overlay"></div>\
+		  <div class="weui-popup__modal" style="border-radius: 5px 5px 0 0;">\
+			<div class="modal-content" style="padding-top:15px;padding-bottom:5px;">\
+			  <div class="weui-grids">\
+				<a href="javascript:;" style="display:none0;"  @click="del" v-if="is_del==1 && id>0" class="weui-grid js_grid" data-id="dialog">\
+				  <div class="weui-grid__icon">\
+					<img src="/images/png/png676.png" alt="">\
+				  </div>\
+				  <p class="weui-grid__label">\
+					删除\
+				  </p>\
+				</a>\
+				<a  href="javascript:;"  @click="fbtn(row)" v-for="row in btns" :key="row.id" class="weui-grid js_grid" data-id="dialog">\
+				  <div class="weui-grid__icon">\
+					<img  v-bind:src="\'/images/png/\'+row.icon.replace(\'-\',\'\')+\'.png\'" alt="">\
+				  </div>\
+				  <p class="weui-grid__label"  v-text="row.title"> </p>\
+				</a>\
+			  </div>\
+			</div>\
+		  </div>\
+		 </div>\
+		 \
+		</div>\
+		',
+        data() {
+        return {
+            list: [],
+            code: "",
+            id: 0,
+			tb:{},
+            fields: {},
+            m: {},
+			is_create:0,
+			is_del:0,
+			is_edit:0,
+			is_search:1,
+			title:"编辑",
+			tbid:0,
+			btns:[],
+			btns2:[]
+        }
+    },
+    methods: {
+        prev() {
+            this.$router.go(-1);
+        },
+		popupbar(){
+			console.log('popup2.....'+this.is_del);
+			$('#toolbar_list').popup();
+		},
+		fbtn(row){
+			$this=this;
+			if(row.jstr!=''){
+				var jstr=template.render(row.jstr,{tb:$this.tb,m:$this.m});
+				eval(jstr);
+				$.closePopup();
+			}else{
+				var url=row.url;
+				if(row.param!=''){
+					if(url.indexOf('?')==-1){
+						url=url+'?'+row.param;
+					}else{
+						url=url+'&'+row.param;
+					}					
+				}
+				var url=template.render(url,{tb:$this.tb,m:$this.m});
+				//window.location=url;
+				if(url.indexOf('/')==0){
+					$this.$router.push(url);
+				}else{
+					window.location=url;
+				}
+			}
+		},
+		del(){
+			$this=this;
+			jQuery.confirm('确定要删除此记录吗?','确认删除',function(){
+				axios.get('/adm/d/del?code='+$this.code+'&id=' + $this.$route.query.id)
+				.then(function (response) {
+					if (response.data =='1'){
+						jQuery.alert('操作成功！',function(){
+							$this.$router.go(-1);  
+						});
+					}else{
+						jQuery.toast('操作失败!','cancel');
+					}
+				})
+				.catch(function (error) {
+					
+				});
+			},function(){
+				$this.$router.go(-1);
+			});
+		},
+		submit:function(){  
+			$this=this;
+			//先进行验证
+			var rst=$.ajax({
+				url : '/xapi/extable',
+				type : 'get',
+				async: false,//使用同步的方式,true为异步方式
+				data : {'code':$this.code,'tbid':$this.tbid,'extype':'javascript','expage':'info','explace':'BEFORE'}
+			}).responseText;
+
+			if(rst!=''){
+				var js='function _js(){'+rst+'};';
+				eval(js);
+				var jsrst=eval('_js();');
+				if(!jsrst){
+					return;
+				}
+			}
+
+			$('#form1').ajaxSubmit(function (data) {
+				if(data=="0" || data=="-1"){
+					$('#_formToken').val(new Date().getTime());
+					jQuery.alert('操作失败,请稍后重试！');
+				}else if(data=="-2"){
+					$('#_formToken').val(new Date().getTime());
+				}
+				else if(parseFloat(data).toString() != "NaN") {
+					var rst=$.ajax({
+						url : '/xapi/extable',
+						type : 'get',
+						async: false,//使用同步的方式,true为异步方式
+						data : {'code':$this.code,'tbid':$this.tbid,'extype':'javascript','expage':'info','explace':'AFTER','id':data}
+					}).responseText;
+					if(rst!=''){
+						var js='function _js(){'+rst+'};';
+						eval(js);
+						var jsrst=eval('_js();');
+						console.log('................jsrst:'+jsrst);
+						if(!jsrst){
+							//console.log('................jsrst:返回 return');
+							$('#_formToken').val(new Date().getTime());
+							return;
+						}
+						jQuery.alert('操作成功！',function(){
+							$this.$router.go(-1);  
+						});
+						//console.log('................jsrst:继续');
+					}else{
+					  jQuery.alert('操作成功！',function(){
+						$this.$router.go(-1);  
+					  });					
+					}
+					//console.log('................准备返回上一步:$this.$router.go(-1);');
+					//$this.$router.go(-1);  
+                } else{
+				  $('#_formToken').val(new Date().getTime());
+				  jQuery.alert(data);
+                }
+            });
+        },
+		tmpStorage(){
+			for(var i=0;i<this.fields.length;i++){
+				if(this.fields[i].form_type=='开关按钮'){
+					if($('#'+this.fields[i].field_code).prop('checked')){
+						localStorage.setItem("_tmp_"+$this.code+'_'+this.fields[i].field_code+"_val",'1');
+					}else{
+						localStorage.setItem("_tmp_"+$this.code+'_'+this.fields[i].field_code+"_val",'0');
+					}
+				}else if(this.fields[i].form_type=='单选框'){
+					localStorage.setItem("_tmp_"+$this.code+'_'+this.fields[i].field_code+"_val",$("input[name='"+this.fields[i].field_code+"']:checked").val());
+				}else if(this.fields[i].form_type=='复选框'){
+					_chval="";
+					$("input[name='"+this.fields[i].field_code+"']:checked").each(function(){
+						if(_chval!=''){_chval+=",";}
+						_chval+=$(this).val();   
+					});
+					localStorage.setItem("_tmp_"+$this.code+'_'+this.fields[i].field_code+"_val",_chval);
+				}else if($('#'+this.fields[i].field_code).val()!=''){
+					localStorage.setItem("_tmp_"+$this.code+'_'+this.fields[i].field_code+"_val",$('#'+this.fields[i].field_code).val());
+				}else{
+					localStorage.removeItem("_tmp_"+$this.code+'_'+this.fields[i].field_code+"_val");
+				}
+			}
+		},
+		pmtStorage(){
+			for(var i=0;i<this.fields.length;i++){
+				if(this.fields[i].form_type=='文本框'){
+					if(this.fields[i].view_list_module!=''){
+						
+					}
+				}
+			}
+		}
+    },
+    created() {
+        $this = this;
+        $this.code = $this.$route.query.c;
+        $this.id = $this.$route.query.id;
+		///xapi/titlejson?code=ledgers
+		axios.get('/xapi/titlejson?code='+$this.code+'&id=' + $this.$route.query.id)
+            .then(function (response) {
+                console.log(response);
+                if (response.data != null){
+					$this.title = response.data.title_edit;
+				}
+				if($this.id!=null && $this.id!='0' && $this.id!=''){
+					//$this.title+='/编辑';
+				}else{
+					//$this.title+='/新建';
+					$this.title = response.data.title_new;
+				}
+            })
+            .catch(function (error) {
+                console.log(error);
+        });
+		var prarams="";
+		if($this.$route.query.id =='0' || $this.$route.query.id==''){ 
+			Object.getOwnPropertyNames($this.$route.query).forEach(function(key){
+				if(key!='code'){
+					prarams+='&'+key+'='+$this.$route.query[key]
+				}
+			});
+		}
+        axios.get('/xapi/fieldjson?code='+$this.code+'&_openid={{._openid}}&id=' + $this.$route.query.id+'&'+prarams)
+            .then(function (response) {
+                console.log(response);
+                if (response.data != null) $this.fields = response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+        });
+
+        //axios.get('/xapi/datajson?code='+$this.code+'&_openid={{._openid}}&id=' + $this.$route.query.id)
+        //    .then(function (response) {
+        //        console.log(response);
+        //        if (response.data != null) $this.m = response.data;
+        //    })
+        //    .catch(function (error) {
+        //        console.log(error);
+        //});
+		var rst=$.ajax({
+			url : '/xapi/datajson?code='+$this.code+'&_openid={{._openid}}&id=' + $this.$route.query.id,
+			type : 'get',
+			async: false,//使用同步的方式,true为异步方式
+			data : {}
+		}).responseText;
+		console.log('------datajson:',rst);
+		var datajson=eval('('+rst+')');
+		$this.m = datajson;
+
+		//
+		//axios.get('/xapi/tbjson?code='+$this.code)
+		//	.then(function (response) {
+		//		if(response.data!=null && response.data!=""){
+		//			$this.tb=response.data;
+		//			$this.tbid=response.data.id;
+		//			$this.is_create=response.data.is_create;
+		//			$this.is_search=response.data.is_search;
+		//			$this.is_edit=response.data.is_edit;
+		//			$this.is_del=response.data.is_del;
+		//		}
+		//});
+		var infotbrst=$.ajax({
+			url : '/xapi/tbjson?code='+$this.code,
+			type : 'get',
+			async: false,//使用同步的方式,true为异步方式
+			data : {}
+		}).responseText;
+		var tbjs=eval('('+infotbrst+')');
+		$this.tb=tbjs;
+		$this.tbid=tbjs.id;
+		$this.is_create=tbjs.is_create;
+		$this.is_search=tbjs.is_search;
+		$this.is_edit=tbjs.is_edit;
+		$this.is_del=tbjs.is_del;
+		/*
+		axios.get('/xapi/btnsjson?p=2&code='+$this.code)
+			.then(function (response) {
+				if(response.data!=null && response.data!=""){
+					console.log(response.data);
+					$this.btns=response.data;
+
+			}
+		});
+		*/
+		var rst=$.ajax({
+				url : '/xapi/btnsjson?p=2&code='+$this.code,
+				type : 'get',
+				async: false,//使用同步的方式,true为异步方式
+				data : {}
+		}).responseText;
+		var btnsjs=eval('('+rst+')');
+		$this.btns=btnsjs;
+
+		var rst2=$.ajax({
+				url : '/xapi/btnsjson2?p=2&code='+$this.code,
+				type : 'get',
+				async: false,//使用同步的方式,true为异步方式
+				data : {}
+		}).responseText;
+		var btnsjs2=eval('('+rst2+')');
+		$this.btns2=btnsjs2;
+
+    },
+    mounted() {
+		$this=this;
+        console.log('datainfo mounted');
+		$('#_formToken').val(new Date().getTime());
+		window.scroll(0,0);
+		var rst=$.ajax({
+				url : '/xapi/tbjson?code='+$this.code,
+				type : 'get',
+				async: false,//使用同步的方式,true为异步方式
+				data : {}
+		}).responseText;
+		var tbjs=eval('('+rst+')');
+		$this.tbid=tbjs.id;
+		$this.is_create=tbjs.is_create;
+		$this.is_search=tbjs.is_search;
+		$this.is_edit=tbjs.is_edit;
+		$this.is_del=tbjs.is_del;
+
+		//console.log('................extable...........');
+		rst=$.ajax({
+			url : '/xapi/extable',
+			type : 'get',
+			async: false,//使用同步的方式,true为异步方式
+			data : {'code':$this.code,'extype':'javascript','expage':'info','explace':'LOAD','id':$this.id}
+		}).responseText;
+		if(rst!=''){
+			var js='function _js(){'+rst+'};';
+			eval(js);
+			var jsrst=eval('_js();');
+			if(!jsrst){
+				//console.log('................jsrst:返回 return');
+			}
+			//console.log('................jsrst:继续');
+		}
+		//console.log('................extable.....end......');
+		$(function(){
+			setTimeout(function () { 
+				$.ajax({
+					url : '/xapi/eventjson',
+					type : 'get',
+					async: true,
+					data : {'code':$this.code},
+					success:function(result){
+						//console.log('................eventjson.....success......');
+						console.log(result);
+						for (var i=0;i<result.length;i++)
+						{
+							if(result[i].content!=''){
+								console.log('------eventjson----result[i].field:'+result[i].field+'   '+result[i].event_type);
+								var content=result[i].content;
+								console.log('------eventjson:'+content);
+								console.log('------eventjson1:'+$('#'+result[i].field));
+								$('#'+result[i].field).on(result[i].event_type,function(){
+									eval(content);
+								});
+							}
+						}
+					}
+				});	
+			}, 1000);
+
+		
+		});
+		
+    }
+})
+
+//数据列表
+var _list=Vue.component('filed-list', {
+        props: [],
+        template:'\
+		<div>\
+			<div class="pro" style="z-index: 800000; width: 100%;">\
+				<div class="fixDivtit">\
+					<div class="tit_cls flexbtn">\
+						<span><i  class="iconfont icon-left" style="display:none0;" @click="prev"></i><span v-text="title"></span></span>\
+						<div style="color:#999;font-size: 21px;margin-right:3px;">\
+						<i class="iconfont icon-add"  style="background-color: #00b3a2;color: white;font-size: 14px;padding:5px 8px;margin-right:5px;"   v-if="is_create==10" @click="add">新建</i>\
+						<i class="icon ion-ios-plus-outline"  @click="add" v-if="is_create==1"></i>\
+						<i class="icon ion-ios-more"  v-if="btns.length > 0"  @click="popupbar"></i>\
+						</div>\
+					</div>\
+				</div>\
+				<div class="search" v-if="is_search==1" style="margin-top: 1px;">\
+                    <p>\
+                        <input type="text" placeholder="请输入搜索关键词..." v-model="qtxt" >\
+                        <span @click="search()">搜索</span>\
+                    </p>\
+                </div>\
+			</div>\
+			<div id="divlist" class="infinite">\
+				<div class="weui-cells " style="margin-top:8px;">\
+						  <div class="weui-cell weui-cell_swiped"  style="height:50px;margin-top:5px;"  v-for="row in list" :key="row.id" >\
+							<div class="weui-cell__bd"  style="height:50px;padding-top:5px;padding-left:3px;" @click="rowClick(code,row._optionid,row.id,row._title,row)">\
+								<img class="pic_list" v-if="row._img" v-bind:src="row._img" style="margin-left:10px;float:left;width:40px;height:40px;">\
+								<div style="float:left;margin-left:10px;max-width:75%;">\
+									<h4 class="weui-media-box__title" style="display: flex;justify-content: space-between;line-height: 22px;">\
+										<p v-text="row._title" class="weui_title_p" style="width:100%;">-</p>\
+										<span style=" color: #999;font-size: 12px;"  v-if="row._rss" v-text="row._rss">-</span>\
+									</h4>\
+									<p class="weui-media-box__desc weui-media-box__desc_p" style="display:block;line-height: 25px;;"  v-text="row._desc" >--</p>\
+								</div>\
+								<div class="weui-cell__ft" style="margin-right:5px;height:50px;line-height:50px;">\
+								<i class="iconfont icon-right" style="color:#999;"></i>\
+								</div>\
+							</div>\
+							<div class="weui-cell__ft" style="top:1px;">\
+								<a class="weui-swiped-btn weui-swiped-btn_primary delete-swipeout" v-if="is_edit==1"    @click="edit(row.id)" href="javascript:">编辑</a>\
+								<a class="weui-swiped-btn weui-swiped-btn_warn delete-swipeout" v-if="is_del==1" @click="del(row.id)" href="javascript:">删除</a>\
+								<a class="weui-swiped-btn weui-swiped-btn_default close-swipeout" href="javascript:$(\'.weui-cell_swiped\').swipeout(\'close\');">关闭</a>\
+							</div>\
+						  </div>\
+\
+				</div>\
+				<div class="weui-loadmore">\
+					<i class="weui-loading"></i>\
+					<span class="weui-loadmore__tips">正在加载</span>\
+				</div>\
+			</div>\
+			\
+		<div id="toolbar_list" class="weui-popup__container popup-bottom">\
+		  <div class="weui-popup__overlay"></div>\
+		  <div class="weui-popup__modal" style="border-radius: 5px 5px 0 0;">\
+			<div class="modal-content" style="padding-top:15px;padding-bottom:5px;">\
+			  <div class="weui-grids">\
+				<a style="display:none;" href="javascript:;"  @click="add" v-if="is_create==1" class="weui-grid js_grid" data-id="dialog">\
+				  <div class="weui-grid__icon">\
+					<img src="/images/png/png160.png" alt="">\
+				  </div>\
+				  <p class="weui-grid__label">\
+					新建\
+				  </p>\
+				</a>\
+				<a  href="javascript:;"  @click="fbtn(row)" v-for="row in btns" :key="row.id" class="weui-grid js_grid" data-id="dialog">\
+				  <div class="weui-grid__icon">\
+					<img  v-bind:src="\'/images/png/\'+row.icon.replace(\'-\',\'\')+\'.png\'" alt="">\
+				  </div>\
+				  <p class="weui-grid__label"  v-text="row.title"> </p>\
+				</a>\
+			  </div>\
+			</div>\
+		  </div>\
+		 </div>\
+		 \
+		</div>\
+		',
+        data() {
+			return {
+				type:0,
+				title:"数据管理",
+				code:"",
+				field:"",
+				list: [],
+				page: 1,
+				pages: 1,
+				is_create:0,
+				is_del:0,
+				is_edit:0,
+				is_search:1,
+				qtxt:"",
+				imgSetInterval:null,
+				tb:null,
+				btns:[]
+			}
+		},
+		watch:{
+			list:function(){
+				$this=this;
+				clearInterval($this.imgSetInterval);
+                this.$nextTick(function(){
+                    this.imgSetInterval=setInterval(function () {
+						$('.weui-cell_swiped').swipeout();
+                        clearInterval($this.imgSetInterval)
+                    },1000)
+                })
+			},
+			'$route' (to, from) {
+				this.$router.go(0);
+			}
+		},
+		methods: {
+				prev() {
+					localStorage.removeItem('_'+$this.code+'_qtxt');
+					this.$router.go(-1);
+				},
+				add() {
+					var $this=this;
+					var q={'c':this.code,'id':0};
+					Object.getOwnPropertyNames($this.$route.query).forEach(function(key){
+						if(key!='code'){
+							eval('q.'+key+'="'+$this.$route.query[key]+'"');
+						}
+					});
+					console.log('*--------------------------------------------------');
+					console.log(q);
+					console.log('*--------------------------------------------------');
+					this.$router.push({path:'_info',query:q});
+					//this.$router.push({path:'_info',query:{'c':this.code,'id':0}});
+				},
+				edit(id){
+					$this=this;
+					$this.$router.push({ path: '_info', query: { 'c':this.code,'id':id }});
+				},
+				del(id){
+					$this=this;
+					jQuery.confirm('确定要删除此记录吗?','确认删除',function(){
+						axios.get('/adm/d/del?code='+$this.code+'&id=' + id)
+						.then(function (response) {
+							if (response.data =='1'){
+								jQuery.alert('操作成功！',function(){
+									$this.$router.go(-1);  
+								});
+							}else{
+								jQuery.toast('操作失败!','cancel');
+							}
+						})
+						.catch(function (error) {
+							
+						});
+					},function(){
+						$this.$router.go(-1);
+					});
+				},
+				popupbar(){
+					console.log('popup.....');
+					$('#toolbar_list').popup();
+				},
+				fbtn(row){
+					$this=this;
+					if(row.jstr!=''){
+						var jstr=template.render(row.jstr,{tb:$this.tb,list:$this.list});
+						eval(jstr);
+						$.closePopup();
+					}else{
+						var url=row.url;
+						if(row.param!=''){
+							if(url.indexOf('?')==-1){
+								url=url+'?'+row.param;
+							}else{
+								url=url+'&'+row.param;
+							}					
+						}
+						var url=template.render(url,{tb:$this.tb,list:$this.list});
+						//window.location=url;
+						//window.location=url;
+						if(url.indexOf('/')==0){
+							$this.$router.push(url);
+						}else{
+							window.location=url;
+						}
+					}
+				},
+				search(){
+					var jlfield=$this.$route.query.jlfield;
+					var jlval=$this.$route.query.jlval;
+					var jlstr='';
+					if(jlfield!=null && jlval!=null){
+						jlstr='&jlfield='+jlfield+'&jlval='+jlval;
+					}
+					axios.get('/xapi/listjson?code='+$this.code+jlstr+'&qtxt='+$this.qtxt,{params:$this.$route.query})
+					.then(function (response) {
+						console.log(response);
+						if(response.data!=null && response.data!=""){
+							$this.list=response.data.rows;
+							$this.title=response.data.extra;
+							$('.weui-loadmore').hide();
+						}else{
+							$('.weui-loadmore').html("没有更多数据...");
+							$('.weui-loadmore').show();
+						}
+						$('.weui-cell_swiped').swipeout();
+					})
+					.catch(function (error) {
+						console.log(error);
+					});
+				},
+				rowClick(code,_optionid,id,val,row){
+					$this=this;
+					//console.log('list type:'+this.type);
+					localStorage.setItem('_'+$this.code+'_qtxt',$this.qtxt);
+					if($this.type==1){
+						//jQuery.toast(id+val, "text");
+						if($this.field !=''){
+							localStorage.setItem("_tmp_"+$this.code+'_'+$this.field+"_id",_optionid);
+							localStorage.setItem("_tmp_"+$this.code+'_'+$this.field+"_title",val);
+							localStorage.setItem("_tmp_"+$this.code+'_'+$this.field+"_val",val);
+						}
+						$this.$router.go(-1);
+
+					}else{
+						if($this.tb!=null && $this.tb.list_link!=null && $this.tb.list_link!=''){
+							var url=unescape($this.tb.list_link).replaceAll('&lt;','<');
+							var prarams='_id='+id;
+							Object.getOwnPropertyNames($this.$route.query).forEach(function(key){
+								if(key!='code' && $this.$route.query[key]!=''){
+									prarams+='&'+key+'='+$this.$route.query[key]
+								}
+							});
+							if(url.indexOf('?')>0){
+								url+='&'+prarams
+							}else{
+								url+='?'+prarams
+							}
+							console.log('url2:'+url);
+							var mestr=localStorage.getItem("_me");
+							if(mestr!=""&&mestr!=null){
+								var me=jQuery.parseJSON(mestr)
+						        url=template.render(url,{row:row,me:me});
+							}else{
+								url=template.render(url,{row:row});
+							}
+
+							console.log('url3:'+url);
+							if(url.indexOf('http')==0){
+								window.location=url;
+							}else{
+								$this.$router.push(url);								
+							}
+						}else{
+							$this.$router.push({ path: '_info', query: { 'c':code,'id':id }});							
+						}
+					}
+				}
+		},
+		created() {
+			$this = this;
+			//console.log('query:'+JSON.stringify($this.$route.query));
+			$this.code=$this.$route.query.code;
+			$this.type=$this.$route.query.type;
+			$this.field=$this.$route.query.field;
+			$this.title=$this.$route.query.title;
+			if($this.title=="" || $this.title==undefined){
+				$this.title="数据管理";
+			}
+			if(localStorage.getItem('_'+$this.code+'_qtxt')!=null){
+				$this.qtxt=localStorage.getItem('_'+$this.code+'_qtxt');
+			}
+
+			var jlfield=$this.$route.query.jlfield;
+			var jlval=$this.$route.query.jlval;
+			var jlstr='';
+			if(jlfield!=null && jlval!=null){
+				jlstr='&jlfield='+jlfield+'&jlval='+jlval;
+			}
+						var where="";
+			if($this.qtxt!=""){
+				where='&qtxt='+$this.qtxt;
+			}
+
+			if($this.$route.query['code']!=''){
+				where+="&code="+$this.$route.query['code'];
+			}else{
+				where+='code='+$this.code;
+			}
+			var prarams="";
+			Object.getOwnPropertyNames($this.$route.query).forEach(function(key){
+				if(key!='code' && $this.$route.query[key]!=''){
+					prarams+='&'+key+'='+$this.$route.query[key]
+				}
+			});
+			//axios.get('/xapi/listjson?code='+$this.code+jlstr+'&qtxt='+$this.qtxt,{params:$this.$route.query})
+			axios.get('/xapi/listjson?t=1'+jlstr+where+prarams)
+			.then(function (response) {
+				console.log(response);
+				if(response.data!=null && response.data!=""){
+					$this.list=response.data.rows;
+					$this.title=response.data.extra;
+					$('.weui-loadmore').hide();
+					$('.weui-cell_swiped').swipeout();
+				}else{
+					$('.weui-loadmore').html("没有更多数据...");
+					$('.weui-loadmore').show(); 
+				}
+				$('.weui-cell_swiped').swipeout();
+				console.log('create get data...');
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
+
+			if($this.type!=1){
+				//console.log('list type 不为1 .......');
+				for(var i=localStorage.length - 1 ; i >=0; i--){
+					//console.log('第'+ (i+1) +'条数据的键值为：' + localStorage.key(i).substr(0,5) +'，数据为：' + localStorage.getItem(localStorage.key(i)));
+					if(localStorage.key(i).substr(0,5)=='_tmp_'){
+						//console.log('删除 .......'+i);
+						localStorage.removeItem(localStorage.key(i));
+					}
+				}
+			}
+
+			//axios.get('/xapi/tbjson?code='+$this.code)
+			//.then(function (response) {
+			//	if(response.data!=null && response.data!=""){
+			//		$this.tb=response.data;
+			//		$this.is_create=response.data.is_create;
+			//		$this.is_search=response.data.is_search;
+			//		$this.is_edit=response.data.is_edit;
+			//		$this.is_del=response.data.is_del;
+			//		
+			//		var height = document.body.clientHeight ;
+			//		if($this.is_search==1){
+			//			$('#divlist').css({"height":(height-92)+"px","overflow-y":"scroll"});				
+			//		}else{
+			//			$('#divlist').css({"height":(height-52)+"px","overflow-y":"scroll"})
+			//		}
+			//	}
+			//});
+			var rst=$.ajax({
+					url : '/xapi/tbjson?code='+$this.code,
+					type : 'get',
+					async: false,//使用同步的方式,true为异步方式
+					data : {}
+			}).responseText;
+			var tbjs=eval('('+rst+')');
+			$this.tb=tbjs;
+			$this.is_create=tbjs.is_create;
+			$this.is_search=tbjs.is_search;
+			$this.is_edit=tbjs.is_edit;
+			$this.is_del=tbjs.is_del;
+			var height = document.body.clientHeight ;
+			if($this.is_search==1){
+				$('#divlist').css({"height":(height-92)+"px","overflow-y":"scroll"});				
+			}else{
+				$('#divlist').css({"height":(height-52)+"px","overflow-y":"scroll"})
+			}
+
+
+			axios.get('/xapi/btnsjson?p=1&code='+$this.code)
+			.then(function (response) {
+				if(response.data!=null && response.data!=""){
+					console.log(response.data);
+					$this.btns=response.data;
+
+				}
+			});
+		},
+		mounted() {
+			$('.weui-cell_swiped').swipeout();
+			//console.log('applist mounted');
+			$this = this;
+			var loading = false;
+			var page = 1;
+			var pages = 10;
+			if(localStorage.getItem('_'+$this.code+'_qtxt')!=null){
+				$this.qtxt=localStorage.getItem('_'+$this.code+'_qtxt');
+			}
+			$("#divlist").infinite().on("infinite", function () {
+				if (loading) return;
+				loading = true;
+				if (page >= pages || pages ==undefined) {
+					$('.weui-loadmore').html("没有更多数据...");
+					$('.weui-loadmore').show();
+					return;
+				}
+				page++;
+				$(".weui-loadmore").show();
+				console.log('page:' + page + '  pages:' + pages);
+
+				var jlfield=$this.$route.query.jlfield;
+				var jlval=$this.$route.query.jlval;
+				var jlstr='';
+				if(jlfield!=null && jlval!=null){
+					jlstr='&jlfield='+jlfield+'&jlval='+jlval;
+				}
+				axios.get("/xapi/listjson?code="+$this.code+"&page=" + page+'&qtxt='+$this.qtxt+jlstr,{params:$this.$route.query})
+					.then(function (response) {
+						console.log('--------------------------');
+						console.log(response.data);
+						if (response.data != null && response.data!="") {
+							pages = response.data.pages;
+							$this.list = $this.list.concat(response.data.rows);
+							$(".weui-loadmore").hide();
+						}else{
+							$('.weui-loadmore').html("没有更多数据...");
+							$('.weui-loadmore').show();
+						}
+						$('.weui-cell_swiped').swipeout();
+					})
+					.catch(function (error) {
+						console.log(error);
+					});
+				setTimeout(function () {
+					loading = false;
+					console.log("setTimeout");
+					$(".weui-loadmore").hide();
+					$('.weui-cell_swiped').swipeout();
+				}, 2000);
+			});
+
+			var height = document.body.clientHeight ;
+			if($this.is_search==1){
+				$('#divlist').css({"height":(height-92)+"px","overflow-y":"scroll"});				
+			}else{
+				$('#divlist').css({"height":(height-52)+"px","overflow-y":"scroll"})
+			}
+
+			$(function(){
+				$.ajax({
+					url : '/xapi/extable',
+					type : 'get',
+					async: true,
+					data : {'code':$this.code,'extype':'javascript','expage':'list','explace':'LOAD'},
+					success:function(rst){
+						eval(rst);
+					}
+				});		
+			});
+		}
+    })
+
+//标签框
+Vue.component('field-label', {
+        props: ['_field','id', 'name','title','value'],
+        template: '\
+		<div class="weui-cell">\
+			<div  class="weui-cell__hd" style="width:120px;">\
+			 <p v-text="title"></p>\
+			</div> \
+			<div  class="weui-cell__ft">\
+			 <div v-text="value" class="weui-input"></div>\
+			 <input v-bind:id="id" style="text-align: right;" v-bind:name="name" type="hidden" v-bind:value="value"  class="weui-input" />\
+			</div>\
+		</div>\
+		',
+        data() {
+            return {
+                
+            }
+        }
+    })
+//文本框
+Vue.component('field-input', {
+        props: ['_field','code','id', 'name','title','value','defval','required','is_readonly','placeholder'],
+        template: '\
+		<div class="weui-cell">\
+			<div  class="weui-cell__hd" style="width:120px;">\
+			 <span v-text="title"></span><span v-if="required==1" style="color:red">*</span>\
+			</div> \
+			<div  class="weui-cell__bd">\
+			 <input v-bind:id="id" style="text-align: left;color:gray;" v-bind:placeholder="placeholder" v-bind:readonly="is_readonly==1" v-bind:name="name" type="text" v-bind:value="value_c"  class="weui-input" />\
+			</div>\
+		</div>\
+		',
+        data() {
+            return {
+                value_c:this.value
+			}
+        },
+		created(){
+			$this=this;
+			if(localStorage.getItem("_tmp_"+$this.code+'_'+this.name+"_val")!=null){
+				this.value_c=localStorage.getItem("_tmp_"+$this.code+'_'+this.name+"_val");
+				console.log('文本框'+"_tmp_"+$this.code+'_'+this.name+"_val="+this.value);
+			}
+			if(this.value=='CURRENT_TIME'){
+				var date = new Date();
+				this.value = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
+			}
+			if(this.value=='CURRENT_DATE'){
+				var date = new Date();
+				this.value = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+			}
+			if($this.value_c==''){
+				$this.value_c=$this.$route.query[$this.name];
+			}
+		},
+		mounted() {
+
+		}
+    })
+	//error
+var _error=Vue.component('app-notfound', {
+        props: ['id','name', 'title', 'value'],
+        template: '\
+		<div class="weui-msg">\
+		  <div class="weui-msg__icon-area"><i class="weui-icon-warn weui-icon_msg"></i></div>\
+		  <div class="weui-msg__text-area">\
+			<h2 class="weui-msg__title">页面未找到</h2>\
+			<p class="weui-msg__desc">页面未找到,请检查连接是否正确...</p>\
+		  </div>\
+		</div>\
+		',
+        data() {
+            return {
+            }
+        }
+    })
+    //详情框
+Vue.component('field-detail', {
+        props: ['_field','name', 'placename', 'values'],
+        template: '<div  class="weui-cell"><div class="weui-cell__hd" style="width:120px;"><label  class="weui-label" v-text="placename"></label></div> <div  class="weui-cell__bd"><span v-text="values"></span></div></div>',
+        data() {
+            return {
+                //val:''
+            }
+        },
+		mounted() {
+			if(localStorage.getItem("_tmp_"+$this.code+'_'+this.name+"_val")!=null){
+				this.value=localStorage.getItem("_tmp_"+$this.code+'_'+this.name+"_val");
+			}
+		}
+    })
+	//开关按钮
+Vue.component('field-switch', {
+        props: ['_field','id','name', 'title', 'value','defval','required'],
+        template: '\
+		<div class="weui-cells " style="margin-top:0px;">\
+			<div class="weui-cell weui-cell_switch">\
+				<div class="weui-cell__hd" style="padding: 5px 0px;width:120px;"><span v-text="title"></span><span v-if="required==1" style="color:red">*</span></div>\
+				<div class="weui-cell__ft">\
+					<input type="checkbox" v-bind:id="id" v-bind:name="name" :checked="value==\'1\'" class="weui-switch">\
+				</div>\
+			</div>\
+		</div>\
+		',
+        data() {
+            return {
+                //val:''
+            }
+        },
+		mounted() {
+			var v=localStorage.getItem("_tmp_"+$this.code+'_'+this.name+"_val");
+			if(v!=null){
+				if(v=='on') v='1';
+				console.log('开关按钮值:',v);
+				this.value=v;
+			}
+		}
+    })
+	//编辑框
+Vue.component('field-editor', {
+        props: ['_field','id','name', 'title', 'value','placeholder','form_tip'],
+        template: '\
+		<div class="weui-cells weui-cells_form">\
+			<div class="weui-cells__title" v-text="title" style="margin-top:5px;font-size:16px;color:#000;"></div>\
+			<div class="weui-cells weui-cells_form">\
+				<div class="weui-cell">\
+					<div class="weui-cell__bd"  v-if="_field.is_readonly!=1">\
+						<textarea style="font-size: 16px;"  class="weui-textarea" v-bind:id="id" v-bind:name="name" v-bind:placeholder="placeholder" rows="3" v-text="value"></textarea>\
+						<div class="weui-textarea-counter"><span>0</span>/200</div>\
+					</div>\
+					<div class="weui-cell__bd"  v-else>\
+						<div v-text="value">&nbsp;</div>\
+					</div>\
+				</div>\
+			</div>\
+		</div>\
+		',
+        data() {
+            return {
+                //val:''
+            }
+        },
+		mounted() {
+			if(localStorage.getItem("_tmp_"+$this.code+'_'+this.name+"_val")!=null){
+				this.value=localStorage.getItem("_tmp_"+$this.code+'_'+this.name+"_val");
+			}
+			if(this.value=='' && this._field.field_defval!=''){
+				this.value=this._field.field_defval;
+			}
+		}
+    })
+
+    //下拉框
+Vue.component('field-select', {
+    props: ['_field','code','id','name','title','value','module','fieldid','islink','required','is_editable','is_editable_combobox','form_cascade'],
+    template: '\
+                <div class="weui-cell">\
+                    <div class="weui-cell__hd" style="width:120px;"><span :for="id" class="weui-label0" v-text="title"></span><span v-if="required==1" style="color:red">*</span>\</div>\
+                    <div class="weui-cell__bd">\
+						 <input v-bind:id="id" style="text-align: left;margin-right:5px;color:gray;"  v-show="is_editable_combobox==1"  v-if="islink==1" v-bind:name="name" type="text" :value="tt_val"   class="weui-input" />\
+						<div v-text="item_text" v-if="islink==1" v-show="is_editable_combobox!=1" style="display:none;text-align: left;width:100%;height:25px;color:gray;" class="weui-cell_access" @click="selectnav(id);return false;">&nbsp;&nbsp;</div>\
+                        <select class="weui-select" v-else v-bind:id="id" v-bind:_value="value" v-bind:name="name"   style="direction: ltr;color:gray;padding-left:0px;" >\
+                             <option  value="" >---</option>\
+                        </select>\
+					</div>\
+					<div class="weui-cell__ft" v-if="islink==1" @click="selectnav(id);return false;">\
+					  <i class="iconfont icon-down"></i>\
+					</div>\
+                </div>\
+            ',
+    data() {
+        return {
+            items: [],
+			item_text:"",
+			tt_val:""
+        }
+    },
+	methods:{
+		selectnav(v){
+			//jQuery.toast(this.id+','+this.name+','+this.title+','+this.fieldid);
+			console.log('........fields:'+this.$parent.fields.length);
+			var fs=this.$parent.fields;
+			var jlfield='';
+			for(var i=0;i<fs.length;i++){
+				if(fs[i].form_cascade==this.name){
+					//console.log('...............找到级联字段:'+fs[i].field_code);
+					
+					jlfield='&jlfield='+fs[i].field_code+'&jlval='+$('#'+fs[i].field_code).val();
+
+					break;
+				}
+			}
+			this.$parent.tmpStorage();
+			this.$router.push({'path':'/_list?code='+this.module+'&type=1&field='+this.id+jlfield});
+			//this.$emit('test'); //成功 父组件 @test="test"
+			
+		}
+	},
+	created(){
+		$this=this;
+		console.log('module:'+this.module+' islink:'+this.islink);
+		this.tt_val=$this.value;
+		console.log('---------------------created value:'+$this.value);
+	},
+    mounted() {
+		var $this = this;
+		if(localStorage.getItem("_tmp_"+$this.code+'_'+$this.name+"_val")!=null && localStorage.getItem("_tmp_"+$this.code+'_'+$this.name+"_val")!=undefined){
+				//$this.value=localStorage.getItem("_tmp_"+$this.code+'_'+$this.name+"_val");
+				$this.tt_val=localStorage.getItem("_tmp_"+$this.code+'_'+$this.name+"_id");
+				if($this.islink!='1'||$this.tt_val==null){
+					$this.tt_val=localStorage.getItem("_tmp_"+$this.code+'_'+$this.name+"_val");
+				}
+				$this.item_text=localStorage.getItem("_tmp_"+$this.module+'_'+$this.name+"_val");
+				
+				console.log('初始化1:'+"_tmp_"+$this.code+'_'+$this.name+"_val="+$this.tt_val);
+		}
+		if(localStorage.getItem("_tmp_"+$this.module+'_'+this.name+"_val")!=null && localStorage.getItem("_tmp_"+$this.module+'_'+this.name+"_val")!=undefined){
+				//$this.value=localStorage.getItem("_tmp_"+$this.module+'_'+$this.name+"_val");
+				$this.tt_val=localStorage.getItem("_tmp_"+$this.module+'_'+$this.name+"_id");
+				$this.item_text=localStorage.getItem("_tmp_"+$this.module+'_'+$this.name+"_val");
+				
+				console.log('初始化2:'+"_tmp_"+$this.module+'_'+$this.name+"_val="+$this.tt_val);
+		}
+			//--------------------------------------------------------------------------------------------------
+			$(function(){
+				var params_com="";
+				Object.getOwnPropertyNames($this.$route.query).forEach(function(key){
+					if(key!='code'&&key!='id'){
+						params_com+='&'+key+'='+$this.$route.query[key]
+					}
+				});
+				if($this.islink!='1'){
+					jQuery.get('/xapi/comboboxjson?id=' + $this.fieldid+'{{._paramstr}}'+params_com,function(data){ 
+						data=jQuery.parseJSON(data);
+						$('#'+$this.name).empty();
+						for(var i=0;i<data.length;i++){
+							var option = $('<option>').val(data[i].id).text(data[i].val);
+							$('#'+$this.name).append(option); 
+						}
+						if($this.form_cascade!='' && $('#'+$this.form_cascade).attr('type')!='text'){
+							$('#'+$this.name).bind('change',function(){
+								var jlval=$('#'+$this.name).val();
+								if(jlval==''){
+									jlval=$('#'+$this.name).attr('_value');
+								}
+								if(jlval==''){
+									jlval=localStorage.getItem("_tmp_"+$this.code+'_'+$this.name+"_val");
+								}
+								console.log('2----已选的值:'+$this.name+':'+jlval);
+								jQuery.get('/xapi/comboboxjson?jlid=' + $this.fieldid+'&jlval='+jlval+'{{._paramstr}}'+params_com,function(data){ 
+									data=jQuery.parseJSON(data);
+									$('#'+$this.form_cascade).empty();
+									for(var i=0;i<data.length;i++){
+										var option = $('<option>').val(data[i].id).text(data[i].val);
+										$('#'+$this.form_cascade).append(option); 
+									}
+									console.log('2----级联的值:'+$('#'+$this.form_cascade).attr('_value'));
+									console.log("2----$('#'+$this.form_cascade):");
+									console.log('#'+$this.form_cascade);
+									$('#'+$this.form_cascade).val($('#'+$this.form_cascade).attr('_value'));
+									if($('#'+$this.form_cascade).attr('_value')==""){
+										$('#'+$this.form_cascade).val(localStorage.getItem("_tmp_"+$this.code+'_'+$this.form_cascade+"_val"));
+									}
+								});
+
+							});						
+						}
+
+
+						if($this.form_cascade!=''){
+							$('#'+$this.name).trigger('change');					
+						}else{
+							$('#'+$this.name).val($this.tt_val);
+						}
+						$this.item_text=$this.tt_val;
+						$('#'+$this.name).val($this.tt_val);
+						console.log('-------------------A item_text:'+$this.item_text);
+						if($this._field.is_readonly=='1'){
+							$("#"+$this.name).attr("disabled","disabled");
+						}
+					});	
+					
+				}else{
+					console.log('-------------------B item_text:'+$this.item_text);
+					$('#'+$this.name).val($this.tt_val);
+					if($this.item_text==""||$this.item_text==null){
+						$this.item_text=$this.tt_val;
+						$.ajax({
+							url: '/xapi/comboboxjson?id=' + $this.fieldid+'{{._paramstr}}'+params_com,
+							method: 'GET',
+							async: false
+							}).success(function(data){
+							data=jQuery.parseJSON(data);
+							for(var i=0;i<data.length;i++){
+								console.log('-------',data[i].id,data[i].val);
+								if(data[i].id==$this.tt_val){
+								$this.item_text=data[i].val;
+								console.log('------找到值');
+								break;
+								}
+							}
+						});
+					}
+				}
+
+			});
+    }
+})
+//搜索下拉框
+Vue.component('field-select2', {
+props: ['_field','code','id','name','title','value','module','fieldid','islink','required','is_editable','is_editable_combobox','form_cascade'],
+template: '<div>\
+			<div class="weui-cells__title">\
+				<span v-text="title"></span><span v-if="required==1" style="color:red">*</span>\
+			</div>\
+			<div class="weui-cell" style="padding: 5px 8px;background-color: #fff;">\
+				<div class="weui-cell__bd">\
+					<div style="width:99%;height:30px;">\
+					<select v-bind:id="id" :value="tt_val" v-bind:name="name" class="weui-select" style="height:35px;direction: ltr; color: gray; padding-left: 10px;font-size:14px;">\
+						<option value="">请选择</option>  \
+					</select>\
+					</div>\
+				</div>\
+			</div>\
+		</div>',
+    data() {
+        return {
+            items: [],
+			item_text:"",
+			tt_val:""
+        }
+    },
+	methods:{
+		selectnav(v){
+			//jQuery.toast(this.id+','+this.name+','+this.title+','+this.fieldid);
+			console.log('........fields:'+this.$parent.fields.length);
+			var fs=this.$parent.fields;
+			var jlfield='';
+			for(var i=0;i<fs.length;i++){
+				if(fs[i].form_cascade==this.name){
+					//console.log('...............找到级联字段:'+fs[i].field_code);
+					
+					jlfield='&jlfield='+fs[i].field_code+'&jlval='+$('#'+fs[i].field_code).val();
+
+					break;
+				}
+			}
+			this.$parent.tmpStorage();
+			this.$router.push({'path':'/_list?code='+this.module+'&type=1&field='+this.id+jlfield});
+			//this.$emit('test'); //成功 父组件 @test="test"
+			
+		}
+	},
+	created(){
+		$this=this;
+		console.log('module:'+this.module+' islink:'+this.islink);
+		this.tt_val=$this.value;
+		console.log('---------------------created value:'+$this.value);
+	},
+    mounted() {
+		var $this = this;
+		if(localStorage.getItem("_tmp_"+$this.code+'_'+$this.name+"_val")!=null && localStorage.getItem("_tmp_"+$this.code+'_'+$this.name+"_val")!=undefined){
+				//$this.value=localStorage.getItem("_tmp_"+$this.code+'_'+$this.name+"_val");
+				$this.tt_val=localStorage.getItem("_tmp_"+$this.code+'_'+$this.name+"_id");
+				if($this.islink!='1'||$this.tt_val==null){
+					$this.tt_val=localStorage.getItem("_tmp_"+$this.code+'_'+$this.name+"_val");
+				}
+				$this.item_text=localStorage.getItem("_tmp_"+$this.module+'_'+$this.name+"_val");
+				
+				console.log('初始化1:'+"_tmp_"+$this.code+'_'+$this.name+"_val="+$this.tt_val);
+		}
+		if(localStorage.getItem("_tmp_"+$this.module+'_'+this.name+"_val")!=null && localStorage.getItem("_tmp_"+$this.module+'_'+this.name+"_val")!=undefined){
+				//$this.value=localStorage.getItem("_tmp_"+$this.module+'_'+$this.name+"_val");
+				$this.tt_val=localStorage.getItem("_tmp_"+$this.module+'_'+$this.name+"_id");
+				$this.item_text=localStorage.getItem("_tmp_"+$this.module+'_'+$this.name+"_val");
+				
+				console.log('初始化2:'+"_tmp_"+$this.module+'_'+$this.name+"_val="+$this.tt_val);
+		}
+			//--------------------------------------------------------------------------------------------------
+			$(function(){
+				var params_com="";
+				Object.getOwnPropertyNames($this.$route.query).forEach(function(key){
+					if(key!='code'&&key!='id'){
+						params_com+='&'+key+'='+$this.$route.query[key]
+					}
+				});
+				var is_editable=-1;
+				if($this.is_editable=="1"){
+					is_editable=0;
+				}
+				
+				if($this.islink!='1'){
+					$('#'+$this.name).select2({
+						    placeholder: '请选择',
+						    minimumResultsForSearch:is_editable,
+							language: "zh-CN",
+							width :"100%",
+							ajax: {
+							url: '/xapi/select2comboboxjson?id=' + $this.fieldid+'{{._paramstr}}'+params_com,
+							dataType: 'json',
+							processResults: function (data,params) {
+								var result = data;
+								return {
+									results: result
+									};
+								}
+							}
+					});
+					$('#'+$this.name).on("change", function(e) {
+							var res=$('#'+$this.name).select2("data")[0];
+							//$('#goods_area_from').val(res.goods_area_from);
+							//$('#goods_name').val(res.text);
+							//$('#category_id').val(res.goods_category_id);
+							var jlval=$('#'+$this.name).val();
+								if(jlval==''){
+									jlval=$('#'+$this.name).attr('_value');
+								}
+								if(jlval==''){
+									jlval=localStorage.getItem("_tmp_"+$this.code+'_'+$this.name+"_val");
+								}
+								console.log('2----已选的值:'+$this.name+':'+jlval);
+								$('#'+$this.form_cascade).select2({
+										placeholder: '请选择',
+										language: "zh-CN",
+										width :"100%",
+										ajax: {
+										url: '/xapi/select2comboboxjson?jlid=' + $this.fieldid+'&jlval='+jlval+'{{._paramstr}}'+params_com,
+										dataType: 'json',
+										processResults: function (data,params) {
+											var result = data;
+											return {
+												results: result
+												};
+												console.log('2----级联的值:'+$('#'+$this.form_cascade).attr('_value'));
+									console.log("2----$('#'+$this.form_cascade):");
+									console.log('#'+$this.form_cascade);
+									$('#'+$this.form_cascade).val($('#'+$this.form_cascade).attr('_value'));
+									if($('#'+$this.form_cascade).attr('_value')==""){
+										$('#'+$this.form_cascade).val(localStorage.getItem("_tmp_"+$this.code+'_'+$this.form_cascade+"_val"));
+									}
+											}
+										}
+								});
+
+
+
+					});
+					
+				}else{
+					console.log('-------------------B item_text:'+$this.item_text);
+					$('#'+$this.name).val($this.tt_val);
+					if($this.item_text==""||$this.item_text==null){
+						$this.item_text=$this.tt_val;
+						$.ajax({
+							url: '/xapi/comboboxjson?id=' + $this.fieldid+'{{._paramstr}}'+params_com,
+							method: 'GET',
+							async: false
+							}).success(function(data){
+							data=jQuery.parseJSON(data);
+							for(var i=0;i<data.length;i++){
+								console.log('-------',data[i].id,data[i].val);
+								if(data[i].id==$this.tt_val){
+								$this.item_text=data[i].val;
+								console.log('------找到值');
+								break;
+								}
+							}
+						});
+					}
+				}
+
+			});
+    }
+})
+//日期
+Vue.component('field-date', {
+    props: ['_field','id','name', 'title', 'value','required'],
+    template:'\
+            <div class="weui-cells weui-cells_form" style="margin-top: 0px;">\
+                <div class="weui-cell">\
+                    <div class="weui-cell__hd"  style="width:120px;"><label :for="name" class="weui-label" v-text="title"></label></div>\
+                    <div class="weui-cell__bd">\
+                        <input style="text-align: left;direction: ltr;" v-if="_field.is_readonly!=1" class="weui-input" :id="name" :name="name" type="date" :value="getFDate()" />\
+						<input style="text-align: left;direction: ltr;" v-else  disabled="disabled" class="weui-input" :id="name" :name="name" type="date" :value="getFDate()" />\
+                    </div>\
+                </div>\
+            </div>',
+    data() {
+        return {
+			datestr:this.value
+        }
+    },
+    methods: {
+        getFDate() {
+                var $this = this;
+				console.log('日期值:'+$this.datestr);
+
+				if($this.datestr=='CURRENT_TIME'){
+					var ddate = new Date();
+					var m=(ddate.getMonth()+1)+'';
+					if(m.length=1)m='0'+m;
+					$this.datestr = ddate.getFullYear()+'-'+(ddate.getMonth()+1)+'-'+ddate.getDate()+' '+ddate.getHours()+':'+ddate.getMinutes()+':'+ddate.getSeconds();
+				}
+				if($this.datestr=='CURRENT_DATE'){
+					var ddate = new Date();
+					var m=(ddate.getMonth()+1)+'';
+					if(m.length==1)m='0'+m;
+					var d=ddate.getDate()+'';
+					if(d.length==1) d='0'+d;
+					$this.datestr = ddate.getFullYear()+'-'+m+'-'+d;
+				}	
+				$this.datestr=$this.datestr.substring(0,10);
+                return $this.datestr;
+            }
+    },
+	created(){
+		if(localStorage.getItem("_tmp_"+$this.code+'_'+this.name+"_val")!=null){
+			this.datestr=localStorage.getItem("_tmp_"+$this.code+'_'+this.name+"_val");
+		}
+	},
+	mounted() {
+			
+	}
+})
+
+//单选框
+Vue.component('field-radio', {
+    props: ['_field','id','name', 'title', 'value','fieldid'],
+    template: '\
+                <div class="weui-cells weui-cells_form" :div_name="name">\
+                <div class="weui-cells__title" v-text="title" style="margin-top:5px;font-size:16px;color:#000;"></div>\
+                <div class="weui-cells weui-cells_checkbox">\
+                    <label class="weui-cell weui-check__label" v-bind:for="name+index" v-for="checks,index in  items">\
+                        <div class="weui-cell__hd">\
+                            <input type="radio" class="weui-check" v-bind:value="checks.id" v-bind:name="name" v-bind:id="name+index" :checked="value==checks.id" />\
+                            <i class="weui-icon-checked"></i>\
+                        </div>\
+                        <div class="weui-cell__bd">\
+                            <p v-text="checks.val"></p>\
+                        </div>\
+                    </label>\
+                </div>\
+            </div>',
+    data() {
+        return {
+			items: [],
+            radio: {
+                title: "-",
+                names: this.name,
+                items: [ ]
+            }
+        }
+    },
+    mounted() {
+        var that = this;
+        axios.get('/xapi/itemjson?id=' + that.fieldid)
+            .then(function (response) {
+                var data = response.data;
+                that.items = data;
+            })
+            .catch(function (error) {
+                console.log(error);
+         });
+		if(localStorage.getItem("_tmp_"+$this.code+'_'+this.name+"_val")!=null){
+			this.value=localStorage.getItem("_tmp_"+$this.code+'_'+this.name+"_val");
+		}
+    }
+})
+
+
+//复选框
+Vue.component('field-checkbox', {
+    props: ['_field','id','name', 'title', 'value','fieldid'],
+    template: '\
+                   <div class="weui-cells weui-cells_form">\
+         <div class="weui-cells__title" v-text="title" style="margin-top:5px;font-size:16px;color:#000;"></div>\
+         <div class="weui-cells weui-cells_checkbox">\
+             <label class="weui-cell weui-check__label" v-bind:for="names+index" v-for="checks,index in  items">\
+                 <div class="weui-cell__hd">\
+                     <input type="checkbox" class="weui-check" v-model="val"  v-bind:value="checks.id" v-bind:name="name" v-bind:id="name+index" />\
+                     <i class="weui-icon-checked"></i>\
+                 </div>\
+                 <div class="weui-cell__bd">\
+                     <p v-text="checks.val"></p>\
+                 </div>\
+             </label>\
+         </div>\
+     </div> ',
+    data() {
+        return {
+			items: [],
+            checkbox: {
+                title: "-",
+                names: "check1",
+                items: []
+            },
+			val:this.value.split(',')
+        }
+    },
+    mounted() {
+        var that = this;
+        that.names = that.name;
+        axios.get('/xapi/itemjson?id=' + that.fieldid)
+            .then(function (response) {
+                var data = response.data;
+                that.items = data;
+            })
+            .catch(function (error) {
+                console.log(error);
+        });
+		if(localStorage.getItem("_tmp_"+$this.code+'_'+this.name+"_val")!=null){
+			console.log('-----------------------checkbox val:'+localStorage.getItem("_tmp_"+$this.code+'_'+this.name+"_val"));
+			this.value=localStorage.getItem("_tmp_"+$this.code+'_'+this.name+"_val");
+			this.val=this.value.split(',');
+		}
+    }
+})
+
+//图片上传
+Vue.component('field-pic', {
+    props: ['_field','code','id','name', 'title', 'value', 'required','shuiyin','img_upload_id','is_readonly'],
+    template: '\
+                  <div>\
+                          <div class="weui-cells" style="margin-top: 0;">\
+                               <a class="weui-cell weui-cell_access0" :id="\'flieDiv\'+name" >\
+                                <div class="weui-cell__hd" style="width:120px;"><p v-text="title"></p><span v-if="required==1" style="color:red">*</span></div>\
+								<div class="weui-cell__bd">\
+                                <input  v-if="is_readonly!=1"  type="file" @click="upimg();" :id="\'file\'+name" accept="image/*" style=" position: absolute; opacity: 0;top: 0;width: 75px;height: 90%;z-index: 10;"/>\
+                                   <div>\
+									<a v-if="src!=\'/images/plus.png\'&&is_readonly!=1" :id="\'clear\'+name" @click="clear" style="margin-left:70px;margin-top:-10px;position:absolute" href="javascript:;" class="weui-progress__opr"> <i class="icon ion-minus-circled" style="font-size:24px;color:#aaaaaa"></i> </a>\
+								   <img v-bind:src="src" @click="upimg();"   :id="\'img\'+name" style="height:75px;z-index: 10000000;"/>\
+								   </div>\
+                                   <input type="hidden" :id="name" :name="name" :value="src"/>\
+								</div>\
+                                 <div class="weui-cell__ft" style="display:none;">\
+                                   <i class="iconfont icon-gengduo"></i>\
+                                 </div>\
+                               </a>\
+                             </div>\
+                          <div class="photoDIV" v-show="showphoto1!=0">\
+                             <div :id="\'clipArea\'+name" style="width: 100%;height: 100%;"></div>\
+                             <a href="javascript:;" :id="\'clipBtn\'+name" class="weui-btn" style="position: fixed;top: 80px;right:10px;line-height:30px;z-index: 1000;background-color: #1aad19;">使用</a>\
+                             <a href="javascript:;" class="weui-btn weui-btn_default quxiao" @click="quxiao" style="position: fixed;top: 80px;line-height:30px;z-index: 1000;">取消</a>\
+                           </div>\
+                 </div>',
+    data() {
+        return {
+            showphoto1: '',
+            val: '',
+            Headimgurl: '',
+            src:'/images/plus.png',
+
+            picphoto: '', //未剪切前图片
+
+        }
+    },
+    methods: {
+		piczom(){
+			$('div.pinch-zoom').each(function () {
+                    new RTP.PinchZoom($(this), {});
+                });
+                $(".picZom").css({ "zIndex": 10 - 9990, "opacity": 0 });
+                $(".picZom img").attr("src", "");
+		},
+		upimg(){
+			if(this.src!="/images/plus.png" && this.src!=""){
+				//layer.photos({
+				//	photos: { "data": [{"src": this.src}] }
+				//	,shift: 5 //0-6的选择，指定弹出图片动画类型，默认随机
+				//  });
+				$(".picZom").css({ "zIndex": 10000000, "opacity": 1 });
+				$(".picZom img").attr("src", this.src);
+				window.event.returnValue = false; 	
+				
+			}
+		},
+        clear(){ 
+            this.picphoto = '';
+			$('#clear'+$this.name).attr("style","display:none");
+			this.src="/images/plus.png";
+			this.value="";
+		},
+        quxiao() {
+            this.showphoto1 = 0;
+            this.picphoto = '';
+        },
+		showimg(pic){
+			if(pic!="/images/plus.png"){
+				console.log("ssssss",pic);
+				layer.open({
+					type: 1
+					,content: '<img src="'+pic+'"/>'
+					//,anim: 'up'
+					//,style: 'position:fixed; bottom:0; left:0; width: 100%; height: 200px; padding:10px 0; border:none;'
+				});
+			}
+			//this.src=pic;
+		}
+    },
+	created(){
+		this.src=this.value;
+		if(this.src==null || this.src==''){
+			this.src='/images/plus.png';
+		}
+		console.log('----------------field-pic created..this.src.['+this.src+']');
+	},
+    mounted() {
+        var $this = this;
+		//$(function () {
+        //    $('div.pinch-zoom').each(function () {
+        //        new RTP.PinchZoom($(this), {});
+        //    });
+        //    $(".picZom").click(function () {
+        //        $('div.pinch-zoom').each(function () {
+        //            new RTP.PinchZoom($(this), {});
+        //        });
+        //        $(".picZom").css({ "zIndex": 10 - 9990, "opacity": 0 });
+        //      $(".picZom img").attr("src", "");
+        //
+        //    })
+        //})
+		//console.log('........picAAAAAA:'+$this.value);
+		if(localStorage.getItem("_tmp_"+$this.code+'_'+this.name+"_val")!=null){
+
+			//console.log('........pic:'+$this.value);
+			$this.src=localStorage.getItem("_tmp_"+$this.code+'_'+this.name+"_val");
+		}
+		if(this.src==null || this.src==''){
+			this.src='/images/plus.png';
+		}
+		var ppic=$('#img'+$this.name);
+		var shuiyin=this.shuiyin;
+		var img_upload_id=$this.img_upload_id;
+	    console.log('shuiyin value...'+shuiyin);
+		console.log('field-pic value...'+$this.src);
+		console.log('photoclip name:'+"#clipArea" + $this.name);
+        var clipArea = new PhotoClip("#clipArea" + $this.name, {
+            size:[320,320], //裁剪框大小
+            outputSize: [0, 0], //打开图片大小，[0,0]表示原图大小
+			maxZoom:1,
+			//adaptive:'20%',
+			adaptive: ['80%'],
+            // img: $this.picphoto,
+			lrzOption:{width:880},
+            file: "#file" + $this.name,
+            //view: "#view", //裁剪预览图片id（需要的自行添加）
+            ok: "#clipBtn" + $this.name,
+            loadStart: function () { //图片开始加载的回调函数。this 指向当前 PhotoClip 的实例对象，并将正在加载的 file 对象作为参数传入。（如果是使用非 file 的方式加载图片，则该参数为图片的 url）
+                    $this.showphoto1 = 1;
+                    console.log('开始读取照片');
+                },
+                loadComplete: function (data) { //图片加载完成的回调函数。this 指向当前 PhotoClip 的实例对象，并将图片的 <img> 对象作为参数传入。
+                    console.log('照片读取完成');
+					var aa=$(data);
+					
+					//console.log(clipArea); 
+					//console.log('---------------------------------------');
+					//console.log($('.photo-clip-rotate-layer').parent().height());
+					//console.log($('.photo-clip-rotate-layer').parent().width());
+
+					//setTimeout(function(){
+					//	clipArea.size($('.photo-clip-rotate-layer').parent().width(),$('.photo-clip-rotate-layer').parent().height());
+					//},1000);
+                },
+                done: function (dataURL) { //裁剪完成的回调函数。this 指向当前 PhotoClip 的实例对象，会将裁剪出的图像数据DataURL作为参数传入。      
+                    //console.log(dataURL); //dataURL裁剪后图片地址base64格式提交给后台处理
+					var _address=""
+					if("{{.app.wx_lbs}}"=="1"){
+						_address=$("#wxaddr").val();
+					}
+                    axios({
+                            method: 'POST',
+                            url: '/xapi/upbase64',
+                            data: {
+								_address:_address,
+                                b: dataURL,
+								watermark:shuiyin,
+								_uploadid:img_upload_id
+                            },
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded' //请求头
+                            },
+                            transformRequest: [
+                                function (data) {
+                                    data = Qs.stringify(data) //序列化参数
+                                    return data
+                                }
+                            ]
+                        })
+                        .then(function (response) {
+                            $this.src = response.data;
+							$this.value=response.data;
+                            $this.showphoto1 = 0;
+                        })
+                        .catch(function (error) {
+                            console.log(error)
+                        })
+
+                }
+        });
+		//console.log('........pic.value:'+$this.value);
+		if($this.src==undefined || $this.src==''){
+			$this.src='/images/plus.png';
+		}
+    }
+})
+
+//图片上传
+Vue.component('field_imgupload', {
+	props: ['_field','code','id','field_code','name', 'title', 'value','multpics_module','img_upload_id','is_readonly','shuiyin'],
+	created(){
+		$this=this; 
+		$this.field_title=$this.title;
+		$this.formpic_id="formpic"+$this.name;
+		$this.gallery_id = "gallery"+$this.name;
+        $this.galleryImg_id = "galleryImg"+$this.name;
+        $this.uploaderInput_id = "uploaderInput"+$this.name;
+        $this.uploaderFiles_id = "uploaderFiles"+$this.name;
+		console.log("field_imgupload created...."+$this.name);
+	},
+    mounted() {
+			$this=this;
+			$that=this;
+            console.log("field_imgupload mounted....");
+            var tmpl = "<li class=\'\ weui-uploader__file \'\ style=\'\ background-image:url(#url#) \'\ data-src=\'\ #url# \'\></li>";
+            var $gallery = $("#gallery"+$this.name);
+            var $galleryImg = $("#galleryImg"+$this.name);
+            var $uploaderInput = $("#uploaderInput"+$this.name);
+            var $uploaderFiles = $("#uploaderFiles"+$this.name);
+
+            var vals = $("#form1").serializeArray();
+			var ps="";
+		    for (index = 0; index < vals.length; ++index) 
+			{ 
+				if (vals[index].name != "_tb" && vals[index].name != "_code") 
+				{
+					if(ps.length>0){ps+="&";}
+					ps+=vals[index].name+"="+vals[index].value;
+				} 
+			} 
+			var _address=""
+			if("{{.app.wx_lbs}}"=="1"){
+				_address=$("#wxaddr").val();
+			}
+			var _url='/xapi/addphoto?_code='+$this.multpics_module+'&_f='+$this.field_code+'&_t='+Math.random()+'&'+ps+'&_uploadid='+$this.img_upload_id+'&w=896&h=582&_shuiyin='+$this.shuiyin+'&_address='+_address;
+			//console.log('-------------------field_imgupload:'+$this.value);
+
+			//初始化显示的图片
+            jQuery.ajaxSettings.async = false;
+			//jQuery.get('/xapi/pics?_code='+$this.multpics_module+'&_f='+$this.field_code+'&_ids='+$this.value,function(data){
+			jQuery.get('/xapi/picsbyfield?_code='+$this.multpics_module+'&_f='+$this.field_code+'&_ids='+$this.value+'&'+ps,function(data){
+				$this.pics=data;
+			});
+            jQuery.ajaxSettings.async = true;
+			var field_code=$this.field_code;
+			var filed_value=$this.value;
+            $uploaderInput.on("change", function (e) {
+				//console.log(e);
+				//console.log($uploaderInput);
+                var src, url = window.URL || window.webkitURL || window.mozURL,
+                    files = e.target.files;
+					console.log('-----------文件个数:'+files.length);
+                for (var i = 0, len = files.length; i < len; ++i) {
+					
+                    var file = files[i];
+					var imgList = new FormData($($this.formpic_id)[0]);  //formData提交
+					imgList.delete("file");
+					imgList.append("image", file);
+					//上传测试
+					$.ajax({
+						type: "post",
+						url: _url,
+						async: false,
+						data: imgList,
+						//下面这两个要写成false，要不然上传不了。
+						processData: false,
+						contentType: false,
+						success: function(response) {//我这里上传接口返回的是json字符串,所以转成了对象后通过for循环将图片url存到数组中,方便html循环展示
+								if(!isNaN(response)){
+									//console.log('ok');
+									//$(tmpl).replace('<li ','<li _id="'+response+'" ');
+									tmpl=tmpl.replace('<li','<li _id="'+response+'" ');
+								
+									if(filed_value!=""){
+										filed_value+=",";
+									}
+									filed_value+=response;
+									$('#'+field_code).val(filed_value);
+									//console.log('----------------pic字段:'+$this.field_code+'  '+field_code);
+ 
+								}else{
+									alert('上传失败:',response);
+								}
+					   },
+						error: function(xhr) {
+							console.log('error:'+xhr);
+						}
+					}); 
+
+                    if (url) {
+                        src = url.createObjectURL(file);
+                    } else {
+                        src = e.target.result;
+                    }
+					tmpl=tmpl.replace('#url#', src)
+					tmpl=tmpl.replace('#url#', src)
+					$uploaderFiles.append(tmpl);
+					//tmpl = "<li class=\'\ weui-uploader__file \'\ style=\'\ background-image:url(#url#) \'\></li>";
+					tmpl = "<li class=\'\ weui-uploader__file \'\ style=\'\ background-image:url(#url#) \' data-src=\'\ #url# \'\></li>";
+                   // $uploaderFiles.append($(tmpl.replace('#url#', src)));
+                }
+            });
+            var index; //第几张图片
+            $uploaderFiles.on("click", "li", function () {
+                index = $(this).index();
+                //$galleryImg.attr("style", this.getAttribute("style"));
+                //$gallery.fadeIn(100);
+				var url=$(this).data("src");
+				$this.upimg(url);
+            });
+            $gallery.on("click", function () {
+                $gallery.fadeOut(100);
+
+            });
+            //删除图片
+            $(".weui-gallery__del2").click(function () {
+				var _id=$uploaderFiles.find("li").eq(index).attr('_id');
+				//console.log("dellllllll",$uploaderFiles.find("li").eq(index));
+				if(_id!=undefined){
+					console.log('---------即将删除:'+field_code+'  |'+filed_value+'  A|'+_id+'   |'+$this.value);
+					console.log('-----多图模块:',$this.multpics_module);
+					jQuery.get('/adm/d/del?code='+$this.multpics_module+'&id='+_id,function(data){
+						console.log('-------d/del:',data);
+					});
+					$(".picZom").css({ "zIndex": 10 - 9990, "opacity": 0 });
+					if($this.value.split(',').length>1){
+						filed_value=filed_value.replace(','+_id+',','').replace(','+_id,'').replace(_id+',','');
+						$('#'+field_code).val(filed_value);
+					}else if(filed_value==_id){
+						filed_value='';
+						$('#'+field_code).val(filed_value);
+					}
+				}
+
+                $uploaderFiles.find("li").eq(index).remove();
+            });
+        },
+		methods: {
+			piczom(){
+				$('div.pinch-zoom').each(function () {
+						new RTP.PinchZoom($(this), {});
+					});
+					$(".picZom").css({ "zIndex": 10 - 9990, "opacity": 0 });
+					$(".picZom img").attr("src", "");
+			},
+			upimg(url){
+				if(url!='/images/plus.png' && url!=""){
+					//layer.photos({
+					//	photos: { "data": [{"src": this.src}] }
+					//	,shift: 5 //0-6的选择，指定弹出图片动画类型，默认随机
+					//  });
+					$(".weui-gallery__del2").show();
+					$(".picZom").css({ "zIndex": 10000000, "opacity": 1 });
+					$(".picZom img").attr("src", url);
+					window.event.returnValue = false; 	
+					
+				}
+			},
+		},
+        data() {
+            return {
+				field_title:"",
+				formpic_id:"formpic",
+				gallery_id : "gallery",
+                galleryImg_id : "galleryImg",
+                uploaderInput_id : "uploaderInput",
+                uploaderFiles_id : "uploaderFiles",
+				filearr :[],
+				pics:[]
+            }
+        },
+        template: ' \
+		<div>\
+			<div class="weui-gallery" :id="gallery_id"> <span class="weui-gallery__img" :id="galleryImg_id"></span> \
+				<div class="weui-gallery__opr" v-if="is_readonly!=1">\
+					<a href="javascript:" class="weui-gallery__del"> <i class="weui-icon-delete weui-icon_gallery-delete"></i> \
+					</a>\
+				</div>\
+			</div>\
+			<a v-if="is_readonly!=1" href="javascript:"  class="weui-gallery__del2" style="position: fixed;bottom: 30px; z-index: 2147483647;text-align: center;margin: 0 auto;display: none;width: 30px;left: 0;right: 0;"> <i class="weui-icon-delete weui-icon_gallery-delete"></i> \					</a>\
+			<div class="weui-cells weui-cells_form" style="margin-top: 5px;">\
+				<div class="weui-cell">\
+					<div class="weui-cell__bd">\
+						<div class="weui-uploader">\
+							<div class="weui-uploader__hd">\
+								<p class="weui-uploader__title" v-text="field_title"></p>\
+							</div>\
+							<div class="weui-uploader__bd">\
+								<ul class="weui-uploader__files" :id="uploaderFiles_id"  >\
+								<li class="weui-uploader__file" :data-src="`${row.val}`" :style="{backgroundImage:`url(${row.val})`}" :_id="row.id" v-for="row in pics"  :key="row.id"></li>\
+								</ul>\
+								<div class="weui-uploader__input-box" v-if="is_readonly!=1">\
+									<input type="hidden" :id="name" :name="name" :value="value"/>\
+									<form action="" method="post" :id="formpic_id" οnsubmit="return false;">\
+									<input :id="uploaderInput_id" class="weui-uploader__input zjxfjs_file" type="file" accept="image/*" multiple="">\
+									</form>\
+								</div>\
+							</div>\
+						</div>\
+					</div>\
+				</div>\
+			</div>\
+		</div>\
+		'
+})
+
+{{if eq .isnav "1"}}
+var nav_menu = Vue.extend({
+    template: '\
+	<div class="flex fixnav">\
+	<router-link v-bind:to="n.path" v-for="n,index in list" v-bind:key="index">\
+		<i v-bind:class="n.icon" class=""></i><p v-text="n.text">-</p>\
+	</router-link>\
+    </div>	',
+    data() {
+        return {
+			openid:'{{._openid}}',
+            list: [
+			{{range $i,$n :=.navmenu}}
+			{
+                "path": "{{$n.url}}",
+                "icon": "{{$n.icon}}",
+                "text": "{{$n.title}}"
+            },
+			{{end}}
+			]
+        }
+    },
+    created() {
+        console.log('nav created');
+    },
+    mounted() {
+        console.log('nav mounted');
+    }
+}) 
+Vue.component('nav_menu', nav_menu);
+{{end}}
+
+</script>
+<div id="app">
+
+	<transition v-bind:name="transitionName">
+ 
+        <router-view   class="child-view" exclude="detail" :key="$route.fullPath"></router-view>
+ 
+    </transition>
+	
+
+</div>
+
+<div class="picZom">
+	<div class="pinch-zoom">
+	<img src="" />
+	</div>
+</div>
+<script>
+        $(function () {
+            $('div.pinch-zoom').each(function () {
+                new RTP.PinchZoom($(this), {});
+            });
+            $(".picZom").click(function () {
+                $('div.pinch-zoom').each(function () {
+                    new RTP.PinchZoom($(this), {});
+                });
+                $(".picZom").css({ "zIndex": 10 - 9990, "opacity": 0 });
+                $(".picZom img").attr("src", "");
+				
+				$(".weui-gallery__del2").hide();
+
+            })
+        })
+    </script>
+</body>
+
+<script>
+{{.pagetpl}}
+
+{{.routes}}
+
+
+const router = new VueRouter({
+  routes // (缩写) 相当于 routes: routes
+})
+
+router.beforeEach(function(to, from, next){
+  if (to.matched.length === 0) { 
+    from.name ? next({
+      name: from.name
+    }) : next('/_error'); 
+  } else {
+	  {{if eq  .login_on  "1"}}
+	  if(to.path!='/login'){
+	    //var rst= await  axios.post('/xapi/islogin');
+		var rst;
+		$.ajax({
+			url : '/xapi/islogin',
+			type : 'post',
+			async: false,
+			data : {},
+			success : function(data){
+				rst=data;
+				console.log('------返回值:',data);
+				return rst;
+			},
+			fail:function(){
+				rst.code=0;
+			}
+		});
+		if(rst.code != 100){
+			next('/login');
+		}else{
+			localStorage.setItem('_me',JSON.stringify(rst.result[0]));
+			//console.log('-----------------'+JSON.stringify(rst.result[0]));
+			next();
+		}	  
+	  }else{
+		next();
+	  }
+	  {{else}}
+		next();
+	  {{end}}
+  }
+});
+
+new Vue({
+	router,
+    el: '#app',
+    data: {
+		transitionName:"slide-right"
+    },
+    methods:{
+		func_islogin(){
+			//var rst= await  axios.post('/api/m/islogin')
+			//return rst;
+			var rst=$.ajax({
+				url : '/api/m/islogin',
+				type : 'post',
+				async: false,
+				data : {},
+				success : function(data){
+					rst=data;
+				},
+				fail:function(){
+					rst.data.code=0;
+				}
+			});
+		}
+    },
+	created(){
+	},
+	mounted(){ 
+	},
+	watch: {
+     $route(to, from) {
+      if(to.meta.index > from.meta.index){
+        this.transitionName = 'slide-left';
+		console.log('-----------------a');
+      }else{
+        this.transitionName = 'slide-right';
+		console.log('-----------------b');
+      }
+     }
+   }
+})
+
+</script>
+<link rel="stylesheet" href="/app/css?app={{.appcode}}" type="text/css" />
+<script src="/js/photoclip/hammer.min.js"></script>
+<script src="/js/photoclip/iscroll-zoom-min.js"></script>
+<script src="/js/photoclip/lrz.all.bundle.js"></script>
+<script src="/js/photoclip/PhotoClip.js"></script>
+<script src="/js/photoclip/qs.js"></script>
+<script src="/js/layer/mobile/layer.js"></script>
+
+</html>
